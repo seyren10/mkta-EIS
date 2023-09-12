@@ -1,0 +1,95 @@
+{
+  "node_modules/@mdi/font/fonts/materialdesignicons-webfont.eot": {
+    "file": "assets/materialdesignicons-webfont-67d24abe.eot",
+    "src": "node_modules/@mdi/font/fonts/materialdesignicons-webfont.eot"
+  },
+  "node_modules/@mdi/font/fonts/materialdesignicons-webfont.ttf": {
+    "file": "assets/materialdesignicons-webfont-a58ecb54.ttf",
+    "src": "node_modules/@mdi/font/fonts/materialdesignicons-webfont.ttf"
+  },
+  "node_modules/@mdi/font/fonts/materialdesignicons-webfont.woff": {
+    "file": "assets/materialdesignicons-webfont-80bb28b3.woff",
+    "src": "node_modules/@mdi/font/fonts/materialdesignicons-webfont.woff"
+  },
+  "node_modules/@mdi/font/fonts/materialdesignicons-webfont.woff2": {
+    "file": "assets/materialdesignicons-webfont-c1c004a9.woff2",
+    "src": "node_modules/@mdi/font/fonts/materialdesignicons-webfont.woff2"
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-4ed993c7.js",
+    "isEntry": true,
+    "src": "resources/css/app.css"
+  },
+  "resources/js/Vue/Pages/Category/Index.css": {
+    "file": "assets/Index-25e6103d.css",
+    "src": "resources/js/Vue/Pages/Category/Index.css"
+  },
+  "resources/js/Vue/Pages/Category/Index.vue": {
+    "css": [
+      "assets/Index-25e6103d.css"
+    ],
+    "file": "assets/Index-2e8d3c89.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/Vue/Pages/Category/Index.vue"
+  },
+  "resources/js/Vue/Pages/Dashboard/Index.vue": {
+    "file": "assets/Index-22b47010.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/Vue/Pages/Dashboard/Index.vue"
+  },
+  "resources/js/Vue/Pages/Employee/Index.vue": {
+    "file": "assets/Index-f5f6aae4.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/Vue/Pages/Employee/Index.vue"
+  },
+  "resources/js/Vue/Pages/EmployeeInventory/Index.vue": {
+    "file": "assets/Index-8b9403e1.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/Vue/Pages/EmployeeInventory/Index.vue"
+  },
+  "resources/js/Vue/Pages/Item/Index.vue": {
+    "file": "assets/Index-7bf4a6c4.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/Vue/Pages/Item/Index.vue"
+  },
+  "resources/js/app.css": {
+    "file": "assets/app-48ed52cc.css",
+    "src": "resources/js/app.css"
+  },
+  "resources/js/app.js": {
+    "assets": [
+      "assets/materialdesignicons-webfont-67d24abe.eot",
+      "assets/materialdesignicons-webfont-c1c004a9.woff2",
+      "assets/materialdesignicons-webfont-80bb28b3.woff",
+      "assets/materialdesignicons-webfont-a58ecb54.ttf"
+    ],
+    "css": [
+      "assets/app-48ed52cc.css"
+    ],
+    "dynamicImports": [
+      "resources/js/Vue/Pages/Dashboard/Index.vue",
+      "resources/js/Vue/Pages/Category/Index.vue",
+      "resources/js/Vue/Pages/Item/Index.vue",
+      "resources/js/Vue/Pages/Employee/Index.vue",
+      "resources/js/Vue/Pages/EmployeeInventory/Index.vue"
+    ],
+    "file": "assets/app-c99d7a89.js",
+    "isEntry": true,
+    "src": "resources/js/app.js"
+  }
+}
