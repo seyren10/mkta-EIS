@@ -1,49 +1,3 @@
-<!-- <script setup>
-import { ref, onMounted, computed } from "vue";
-import { VDataTable } from "vuetify/labs/VDataTable";
-import Create from "./Create.vue";
-import Edit from "./Edit.vue";
-
-const mounted = ref(false);
-const search = ref("");
-const update = ref({ data: [], dialog: false });
-
-const props = defineProps({ employees: Array });
-
-const headers = [
-    { key: "id", title: "ID" },
-    { key: "employeeNo", title: "Employee Number" },
-    { key: "fullName", title: "Full Name" },
-    { key: "isActive", title: "Status" },
-    { key: "actions" },
-];
-
-//COMPUTED
-
-const employeeDataTable = computed(() => {
-    return props.employees.map((emp) => {
-        return {
-            id: emp.id,
-            employeeNo: emp.employee_no,
-            fullName: emp.full_name,
-            RFIDNo: emp.RFID_no,
-            isActive: emp.is_active,
-        };
-    });
-});
-
-const safeRFIDDisplay = (rfid) => {
-    return [...rfid].map((r, i) => (i < rfid.length - 2 ? "x" : r)).join("");
-};
-
-//EVENT HOOKS
-
-//prevent the Teleport to render before the MainLayout
-onMounted(() => {
-    mounted.value = true;
-});
-</script> -->
-
 <script>
 import { VDataTable } from "vuetify/labs/VDataTable";
 import Create from "./Create.vue";
@@ -105,7 +59,10 @@ export default {
                             },
                         }"
                     >
-                        <v-btn color="blue-grey-lighten-1" variant="flat"
+                        <v-btn
+                            color="blue-lighten-4 text-grey-darken-2"
+                            variant="flat"
+                            size="small"
                             >view details</v-btn
                         >
                     </router-link>
@@ -130,7 +87,7 @@ export default {
     </Teleport>
 </template>
 
-<style>
+<style scoped>
 .v-row {
     flex-wrap: nowrap;
     margin: 0 !important;

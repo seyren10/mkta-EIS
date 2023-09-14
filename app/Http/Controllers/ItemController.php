@@ -48,9 +48,11 @@ class ItemController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Item $item)
     {
-        //
+        return response()->json([
+            'data' => $item->load(['category', 'ownedByEmployee'])
+        ]);
     }
 
     /**

@@ -2,9 +2,10 @@
 import { VDataTable } from "vuetify/labs/VDataTable";
 import Create from "./Create.vue";
 import Edit from "./Edit.vue";
+import Associate from "./Associate.vue";
 
 export default {
-    components: { VDataTable, Create, Edit },
+    components: { VDataTable, Create, Edit, Associate },
     data() {
         return {
             mounted: false,
@@ -18,7 +19,8 @@ export default {
                 // { key: "serial_no", title: "Serial Number" },
                 // { key: "mk_tag_no", title: "MK Tag Number" },
                 { key: "condition", title: "Condition" },
-                { key: "owned_by_employee", title: "Employee in charge" },
+                { key: "employee_name", title: "Active user" },
+                { key: "device_association", title: "Device Association" },
                 { key: "actions", title: "", sortable: false },
             ],
         };
@@ -30,7 +32,8 @@ export default {
                     ...item,
                     category: item.category.name,
                     category_id: item.category.id,
-                    owned_by_employee: item.owned_by_employee.full_name,
+                    employee_name: item.owned_by_employee?.full_name,
+                    employee_id: item.owned_by_employee?.id,
                 };
             });
         },
@@ -84,12 +87,30 @@ export default {
             style="overflow-y: hidden"
         >
             <template #item.actions="{ item }">
-                <!-- <v-btn @click="display(item)">Click</v-btn> -->
-                <Edit
-                    :categories="categories"
-                    :item="item.selectable"
-                    @updated="fetchItem"
-                />
+                <div style="display: flex; gap: 2rem; align-items: center">
+                    <router-link
+                        v-if="item.selectable.id"
+                        :to="{
+                            name: 'show',
+                            params: {
+                                showable: 'item',
+                                id: item.selectable.id,
+                            },
+                        }"
+                    >
+                        <v-btn
+                            color="blue-lighten-4 text-grey-darken-2"
+                            variant="flat"
+                            size="small"
+                            >view device</v-btn
+                        >
+                    </router-link>
+                    <Edit
+                        :categories="categories"
+                        :item="item.selectable"
+                        @updated="fetchItem"
+                    />
+                </div>
             </template>
 
             <template #item.condition="{ item }">
@@ -106,6 +127,42 @@ export default {
                     {{ item.raw.condition }}
                 </v-chip>
             </template>
+            <template #item.employee_name="{ item }">
+                <td>
+                    <router-link
+                        v-if="item.selectable.employee_id"
+                        :to="{
+                            name: 'show',
+                            params: {
+                                showable: 'employee',
+                                id: item.selectable.employee_id,
+                            },
+                        }"
+                        class="text-blue-lighten-1"
+                        >{{ item.columns.employee_name }}</router-link
+                    >
+                </td>
+            </template>
+            <template #item.device_association="{ item }">
+                <div class="d-flex" style="gap: 1rem">
+                    <Associate
+                        v-if="!item.selectable.owned_by_employee"
+                        :item="item.selectable"
+                    >
+                    </Associate>
+
+                    <v-btn
+                        v-else
+                        prepend-icon="mdi-minus"
+                        rounded="2"
+                        elevation="1"
+                        variant="outlined"
+                        color="blue-lighten-1"
+                        size="small"
+                        >Surrender</v-btn
+                    >
+                </div>
+            </template>
         </VDataTable>
     </v-card>
 
@@ -121,5 +178,11 @@ export default {
     margin-inline-end: 2rem;
     display: flex;
     gap: 0.7rem;
+}
+
+.v-row {
+    flex-wrap: nowrap;
+    margin: 0 !important;
+    flex: none;
 }
 </style>

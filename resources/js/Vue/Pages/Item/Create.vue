@@ -12,6 +12,7 @@ export default {
                 serial_no: null,
                 mk_tag_no: null,
                 category_id: 1,
+                condition: "working",
                 errors: {},
             },
             isLoading: false,

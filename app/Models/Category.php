@@ -19,5 +19,11 @@ class Category extends Model
     public function items(): HasMany
     {
         return $this->hasMany(\App\Models\Item::class);
+        
+    }
+    public function available(): HasMany
+    {
+        return $this->hasMany(\App\Models\Item::class)->where();
+        
     }
 }

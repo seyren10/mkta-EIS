@@ -1,6 +1,6 @@
 <script>
-import EmployeeShow from "./EmployeeShow.vue";
-import ItemShow from "./ItemShow.vue";
+import EmployeeShow from "../Pages/Employee/Show.vue";
+import ItemShow from "../Pages/Item/Show.vue";
 export default {
     data() {
         return {

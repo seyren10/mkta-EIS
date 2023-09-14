@@ -19,7 +19,8 @@ class Item extends Model
     ];
 
     protected $hidden = [
-        'category_id'
+        'category_id',
+        'employee_id'
     ];
 
     public function category(): BelongsTo

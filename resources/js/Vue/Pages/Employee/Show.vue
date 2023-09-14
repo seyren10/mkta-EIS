@@ -41,7 +41,7 @@ export default {
                         style="gap: 1rem"
                     >
                         <v-icon>mdi-devices</v-icon>
-                        <h2 class="text-h6">Device Owned</h2>
+                        <h2 class="text-h6">Device/s Owned</h2>
                     </div>
                     <v-table v-if="employee.items?.length">
                         <thead>
