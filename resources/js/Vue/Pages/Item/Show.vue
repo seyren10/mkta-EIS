@@ -3,6 +3,7 @@ export default {
     data() {
         return {
             item: {},
+            employeeInventory: [],
         };
     },
 
@@ -11,9 +12,20 @@ export default {
             const res = await axios.get(`/api/item/${this.$route.params.id}`);
             this.item = res.data.data;
         },
+
+        async fetchEmployeeInventory() {
+            const res = await axios.get("/api/employee-inventory");
+            this.employeeInventory = res.data.data;
+        },
+        transferType(isActive) {
+            if (isActive) {
+                return "Associate";
+            } else return "Dissociate";
+        },
     },
     created() {
         this.fetchItem();
+        this.fetchEmployeeInventory();
     },
 };
 </script>
@@ -125,6 +137,29 @@ export default {
             <v-card-title prepend-icon="mdi-history"
                 >Device history</v-card-title
             >
+            <v-table>
+                <thead>
+                    <tr>
+                        <th>Tranferred Date</th>
+                        <th>Surrendered Date</th>
+                        <th>Officer in charge</th>
+                        <th>Type of Transfer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        v-for="(ei, index) in this.employeeInventory"
+                        :key="index"
+                    >
+                        <td>{{ ei.transferred_date }}</td>
+                        <td>{{ ei.surrendered_date }}</td>
+                        <td>{{ ei.officer_in_charge }}</td>
+                        <td>
+                            <v-chip :color="ei.is_active ? 'green' : 'red'">{{ transferType(ei.is_active) }}</v-chip>
+                        </td>
+                    </tr>
+                </tbody>
+            </v-table>
         </v-card>
     </v-container>
 </template>

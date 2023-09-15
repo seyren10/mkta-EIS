@@ -9,7 +9,7 @@ export default {
     data() {
         return {
             form: {
-                transferred_date: new Date(),
+                transferred_date: null,
                 officer_in_charge: "Manual Dayrit",
                 is_active: 1,
                 item_id: this.item.id,
@@ -35,21 +35,21 @@ export default {
         },
         async fetchEmployees() {
             const res = await axios.get("/api/employee");
-            this.employees = res.data.data;
+
+            this.employees = res.data.data.filter(emp=> emp.is_active);
+            this.searchResult = this.employees;
         },
         searchEmployee() {
             this.searchResult = this.employees.filter((emp) => {
-                if (
-                    emp.full_name.includes(this.search) ||
-                    emp.id.toString().includes(this.search) ||
-                    emp.employee_no.includes(this.search)
-                )
-                    return emp;
+                return (
+                    emp.full_name.customIncludes(this.search)
+                );
             });
         },
-        create() {
-            // this.fetchEmployees();
+        async create() {
+            const res = await axios.post('/api/employee-inventory', this.form);
         },
+      
     },
     created() {
         this.fetchEmployees();
@@ -101,13 +101,15 @@ export default {
                     <v-row>
                         <v-form style="width: 100%" @submit.prevent="create">
                             <v-col cols="12">
-                                <VDatePicker
+                                <!-- <VDatePicker
                                     v-model="form.transferred_date"
                                     :hide-actions="true"
                                     input-mode="keyboard"
                                     class="mx-auto"
                                     title="transferred date"
-                                ></VDatePicker>
+                                    format="(YYYY-MM-DD)"
+                                ></VDatePicker> -->
+                                <input type="date" v-model="form.transferred_date" />
                             </v-col>
                             <v-col cols="12">
                                 <v-text-field
@@ -129,9 +131,15 @@ export default {
                                     label="Search"
                                     append-icon="mdi-magnify"
                                     placeholder="Search for ID, RFID or name..."
+                                    v-model="search"
                                     @keydown.enter="searchEmployee"
                                 ></v-text-field>
-                                <v-select label="Search Result"></v-select>
+                                <v-select label="Active Employee" required v-model="form.employee_id" :items="searchResult.map(c=>{
+                                    return {
+                                        title: c.full_name,
+                                        value: c.id
+                                    }
+                                })"></v-select>
                             </v-col>
                             <v-col cols="12"
                                 ><v-btn

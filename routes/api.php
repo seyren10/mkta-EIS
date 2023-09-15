@@ -25,3 +25,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::apiResource('category', \App\Http\Controllers\CategoryController::class);
 Route::apiResource('item', \App\Http\Controllers\ItemController::class);
 Route::apiResource('employee', \App\Http\Controllers\EmployeeController::class);
+
+
+Route::prefix('/employee-inventory')->group(function () {
+    Route::get('',[\App\Http\Controllers\EmployeeInventoryController::class, 'index'])->name('employeeInventory.index');
+    Route::post('',[\App\Http\Controllers\EmployeeInventoryController::class, 'associate'])->name('employeeInventory.associate');
+    Route::delete('{employeeInventory}',[\App\Http\Controllers\EmployeeInventoryController::class, 'disassociate'])->name('employeeInventory.disassociate');
+});

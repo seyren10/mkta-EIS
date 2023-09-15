@@ -14,6 +14,9 @@ import "@mdi/font/css/materialdesignicons.css";
 //Vue Router
 import { router } from "./Vue/router/index.js";
 
+//utilities
+import './utilities/helper.js'
+
 const vuetify = createVuetify({
     components,
     directives,

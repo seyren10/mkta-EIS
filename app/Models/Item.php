@@ -16,6 +16,7 @@ class Item extends Model
         'serial_no',
         'mk_tag_no',
         'category_id',
+        'employee_id'
     ];
 
     protected $hidden = [
