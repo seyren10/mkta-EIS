@@ -2,11 +2,17 @@
 import { VDataTable } from "vuetify/labs/VDataTable";
 import Create from "./Create.vue";
 import Edit from "./Edit.vue";
+import { ref } from "vue";
 export default {
+    async setup() {
+        const res = await axios.get("/api/employee");
+        const employees = ref(res.data.data);
+
+        return { employees };
+    },
     components: { VDataTable, Create, Edit },
     data() {
         return {
-            employees: [],
             search: "",
             mounted: false,
 
@@ -18,16 +24,13 @@ export default {
             ],
         };
     },
-
     methods: {
         async fetchEmployees() {
             const res = await axios.get("/api/employee");
             this.employees = res.data.data;
         },
     },
-    created() {
-        this.fetchEmployees();
-    },
+
     mounted() {
         this.mounted = true;
     },

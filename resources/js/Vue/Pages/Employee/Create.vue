@@ -48,9 +48,10 @@ export default {
     <v-row justify="center">
         <v-dialog
             v-model="dialog"
-            fullscreen
             :scrim="false"
             transition="dialog-bottom-transition"
+            style="max-width: 30rem"
+            persistent
         >
             <template v-slot:activator="{ props }">
                 <v-btn
@@ -64,18 +65,11 @@ export default {
             </template>
             <v-card>
                 <v-toolbar color="white" class="border-b">
-                    <v-toolbar-title
+                    <v-toolbar-title style="flex-basis: 100%"
                         >Employee Registration Form</v-toolbar-title
                     >
                     <v-spacer></v-spacer>
                     <v-toolbar-items>
-                        <v-btn
-                            variant="text"
-                            color="blue-lighten-1"
-                            @click="dialog = false"
-                        >
-                            Register
-                        </v-btn>
                         <v-btn variant="text" @click="dialog = false">
                             cancel
                         </v-btn>

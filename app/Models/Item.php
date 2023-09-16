@@ -16,7 +16,8 @@ class Item extends Model
         'serial_no',
         'mk_tag_no',
         'category_id',
-        'employee_id'
+        'employee_id',
+        'condition'
     ];
 
     protected $hidden = [
@@ -29,9 +30,9 @@ class Item extends Model
         return $this->belongsTo(\App\Models\Category::class, 'category_id');
     }
 
-    public function employeesInventory()
+    public function employeeInventories()
     {
-        return $this->hasMany(\App\Models\EmployeeInventory::class);
+        return $this->hasMany(\App\Models\EmployeeInventory::class)->orderByDesc('created_at');
     }
 
     public function ownedByEmployee()

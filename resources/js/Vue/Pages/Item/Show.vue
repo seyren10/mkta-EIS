@@ -14,8 +14,10 @@ export default {
         },
 
         async fetchEmployeeInventory() {
-            const res = await axios.get("/api/employee-inventory");
-            this.employeeInventory = res.data.data;
+            const res = await axios.get(
+                `/api/employee-inventory/${this.$route.params.id}`
+            );
+            this.employeeInventory = res.data.data
         },
         transferType(isActive) {
             if (isActive) {
@@ -117,10 +119,13 @@ export default {
                             </v-list-item>
                             <v-list-item>
                                 <v-list-item-title>
-                                    {{
-                                        item.owned_by_employee?.full_name
-                                    }}</v-list-item-title
-                                >
+                                    <router-link
+                                        :to="`/employee/${item.owned_by_employee?.id}/show`"
+                                        class="text-blue-lighten-1"
+                                        replace
+                                        >{{ item.owned_by_employee?.full_name }}
+                                    </router-link>
+                                </v-list-item-title>
                                 <v-list-item-subtitle
                                     >Active User</v-list-item-subtitle
                                 >
@@ -144,9 +149,10 @@ export default {
                         <th>Surrendered Date</th>
                         <th>Officer in charge</th>
                         <th>Type of Transfer</th>
+                        <th>Assigned employee</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="descending">
                     <tr
                         v-for="(ei, index) in this.employeeInventory"
                         :key="index"
@@ -155,7 +161,14 @@ export default {
                         <td>{{ ei.surrendered_date }}</td>
                         <td>{{ ei.officer_in_charge }}</td>
                         <td>
-                            <v-chip :color="ei.is_active ? 'green' : 'red'">{{ transferType(ei.is_active) }}</v-chip>
+                            <v-chip :color="ei.is_active ? 'green' : 'red'">{{
+                                transferType(ei.is_active)
+                            }}</v-chip>
+                        </td>
+                        <td>
+                            <router-link :to="`/employee/${ei.by_employee.id}/show`" class="text-blue-lighten-1">
+                                {{ ei.by_employee.full_name }}
+                            </router-link>
                         </td>
                     </tr>
                 </tbody>
@@ -163,3 +176,4 @@ export default {
         </v-card>
     </v-container>
 </template>
+

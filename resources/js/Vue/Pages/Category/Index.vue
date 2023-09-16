@@ -1,16 +1,20 @@
 <script>
 import Create from "./Create.vue";
 import Edit from "./Edit.vue";
-
+import { ref } from "vue";
 export default {
+    async setup() {
+        const res = await axios.get("api/category");
+        const categories = ref(res.data);
+
+        return {
+            categories,
+        };
+    },
     data() {
         return {
             mounted: false,
-            categories: [],
         };
-    },
-    created() {
-        this.fetchCategories();
     },
     mounted() {
         this.mounted = true;

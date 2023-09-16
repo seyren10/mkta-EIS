@@ -31,10 +31,9 @@ export const router = createRouter({
                     component: () => import("../Pages/Employee/Index.vue"),
                 },
                 {
-                    path: "employee-inventory",
-                    name: "employeeInventory",
-                    component: () =>
-                        import("../Pages/EmployeeInventory/Index.vue"),
+                    path: "/:showable+/:id/show",
+                    name: "show",
+                    component: () => import("../components/Show.vue"),
                 },
             ],
         },
@@ -42,11 +41,6 @@ export const router = createRouter({
             path: "/login",
             name: "login",
             component: Login,
-        },
-        {
-            path: "/:showable+/:id/show",
-            name: "show",
-            component: () => import("../components/Show.vue"),
         },
     ],
 });

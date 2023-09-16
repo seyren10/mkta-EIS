@@ -29,6 +29,7 @@ Route::apiResource('employee', \App\Http\Controllers\EmployeeController::class);
 
 Route::prefix('/employee-inventory')->group(function () {
     Route::get('',[\App\Http\Controllers\EmployeeInventoryController::class, 'index'])->name('employeeInventory.index');
+    Route::get('/{item}',[\App\Http\Controllers\EmployeeInventoryController::class, 'show'])->name('employeeInventory.show');
     Route::post('',[\App\Http\Controllers\EmployeeInventoryController::class, 'associate'])->name('employeeInventory.associate');
-    Route::delete('{employeeInventory}',[\App\Http\Controllers\EmployeeInventoryController::class, 'disassociate'])->name('employeeInventory.disassociate');
+    Route::post('/dissociate',[\App\Http\Controllers\EmployeeInventoryController::class, 'dissociate'])->name('employeeInventory.dissociate');
 });

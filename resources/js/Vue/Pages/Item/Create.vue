@@ -11,12 +11,19 @@ export default {
                 model: null,
                 serial_no: null,
                 mk_tag_no: null,
-                category_id: 1,
+                category_id: this.categories.length
+                    ? 1
+                    : "No Category Available",
                 condition: "working",
                 errors: {},
             },
             isLoading: false,
         };
+    },
+    watch: {
+        dialog(newC, oldC) {
+            console.log(this.categories);
+        },
     },
     methods: {
         async create() {
@@ -28,7 +35,7 @@ export default {
                     brand: null,
                     model: null,
                     serial_no: null,
-                    category_id: 1,
+                    category_id: null,
                     mk_tag_no: null,
                     errors: {},
                 };
@@ -48,9 +55,10 @@ export default {
     <v-row justify="center">
         <v-dialog
             v-model="dialog"
-            fullscreen
             :scrim="false"
             transition="dialog-bottom-transition"
+            persistent
+            style="max-width: 30rem"
         >
             <template v-slot:activator="{ props }">
                 <v-btn
@@ -67,20 +75,13 @@ export default {
                     <v-toolbar-title>Add Item</v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-toolbar-items>
-                        <v-btn
-                            variant="text"
-                            color="blue-lighten-1"
-                            @click="dialog = false"
-                        >
-                            Create
-                        </v-btn>
                         <v-btn variant="text" @click="dialog = false">
                             cancel
                         </v-btn>
                     </v-toolbar-items>
                 </v-toolbar>
 
-                <v-container style="max-width: 50rem">
+                <v-container style="max-width: 30rem">
                     <v-row>
                         <v-form style="width: 100%" @submit.prevent="create">
                             <v-col cols="12">

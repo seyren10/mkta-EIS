@@ -13,6 +13,7 @@ export default {
                 serial_no: this.item.serial_no,
                 mk_tag_no: this.item.mk_tag_no,
                 category_id: this.item.category_id,
+                condition: this.item.condition,
                 errors: {},
             },
             isLoading: false,
@@ -51,9 +52,10 @@ export default {
     <v-row justify="center">
         <v-dialog
             v-model="dialog"
-            fullscreen
             :scrim="false"
             transition="dialog-bottom-transition"
+            style="max-width: 30rem"
+            persistent
         >
             <template v-slot:activator="{ props }">
                 <v-btn
@@ -70,20 +72,13 @@ export default {
                     <v-toolbar-title>Update Item</v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-toolbar-items>
-                        <v-btn
-                            variant="text"
-                            color="blue-lighten-1"
-                            @click="dialog = false"
-                        >
-                            Update
-                        </v-btn>
                         <v-btn variant="text" @click="dialog = false">
                             cancel
                         </v-btn>
                     </v-toolbar-items>
                 </v-toolbar>
 
-                <v-container style="max-width: 50rem">
+                <v-container>
                     <v-row>
                         <v-form style="width: 100%" @submit.prevent="update">
                             <v-col cols="12">
@@ -131,6 +126,18 @@ export default {
                                     label="MK Tag Number"
                                     v-model="form.mk_tag_no"
                                 ></v-text-field>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-select
+                                    label="Device Condition"
+                                    :items="['working', 'damaged', 'broken']"
+                                    v-model="form.condition"
+                                    :error="
+                                        form.errors.condition ? true : false
+                                    "
+                                    :error-messages="form.errors.condition"
+                                >
+                                </v-select>
                             </v-col>
                             <v-col cols="12"
                                 ><v-btn

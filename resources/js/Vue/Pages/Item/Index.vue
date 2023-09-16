@@ -3,15 +3,26 @@ import { VDataTable } from "vuetify/labs/VDataTable";
 import Create from "./Create.vue";
 import Edit from "./Edit.vue";
 import Associate from "./Associate.vue";
+import { ref } from "vue";
 
 export default {
+    async setup() {
+        const itemRes = await axios.get("/api/item");
+        const items = ref(itemRes.data.data);
+
+        const categoryRes = await axios.get("/api/category");
+        const categories = ref(categoryRes.data.data);
+
+        return {
+            items,
+            categories,
+        };
+    },
     components: { VDataTable, Create, Edit, Associate },
     data() {
         return {
             mounted: false,
             search: "",
-            items: [],
-            categories: [],
             headers: [
                 { key: "category", title: "Category" },
                 { key: "brand", title: "Brand" },
@@ -53,13 +64,16 @@ export default {
                 this.categories = res.data.data;
             } catch (e) {}
         },
-        display(item) {
-            console.log(item);
+        async surrender(itemData) {
+            const res = await axios.post("/api/employee-inventory/dissociate", {
+                surrendered_date: new Date().toISOString().split("T")[0],
+                officer_in_charge: "Manuelito Dayrit",
+                is_active: 0,
+                item_id: itemData.id,
+                employee_id: itemData.employee_id,
+            });
+            console.log(res);
         },
-    },
-    created() {
-        this.fetchCategories();
-        this.fetchItem();
     },
     mounted() {
         this.mounted = true;
@@ -108,6 +122,7 @@ export default {
                     <Edit
                         :categories="categories"
                         :item="item.selectable"
+                        :key="Math.random()"
                         @updated="fetchItem"
                     />
                 </div>
@@ -144,7 +159,11 @@ export default {
                 </td>
             </template>
             <template #item.device_association="{ item }">
-                <div class="d-flex" style="gap: 1rem">
+                <div
+                    class="d-flex"
+                    style="gap: 1rem"
+                    v-if="item.selectable.condition === 'working'"
+                >
                     <Associate
                         v-if="!item.selectable.owned_by_employee"
                         :item="item.selectable"
@@ -159,6 +178,7 @@ export default {
                         variant="outlined"
                         color="blue-lighten-1"
                         size="small"
+                        @click="() => surrender(item.selectable)"
                         >Surrender</v-btn
                     >
                 </div>

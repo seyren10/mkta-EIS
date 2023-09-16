@@ -1,12 +1,19 @@
 <script>
+import Spinner from "../components/spinner.vue";
 import NavLink from "./components/NavLink.vue";
 import { links } from "./linksConfig";
 
 export default {
-    data: () => ({ drawer: null, links: links }),
-    components: { NavLink },
+    data: () => {
+        return {
+            drawer: null,
+            links: links,
+        };
+    },
+    components: { NavLink, Spinner },
 };
 </script>
+
 <template>
     <v-app id="inspire">
         <v-navigation-drawer v-model="drawer">
@@ -31,13 +38,21 @@ export default {
 
         <v-main class="bg-grey-lighten-5">
             <v-container>
-                <router-view></router-view>
+                <router-view v-slot="{ Component }">
+                    <template v-if="Component">
+                        <Suspense timeout="0">
+                            <component :is="Component" />
+
+                            <template v-slot:fallback>
+                                <Spinner />
+                            </template>
+                        </Suspense>
+                    </template>
+                </router-view>
             </v-container>
         </v-main>
     </v-app>
 </template>
-
-<script></script>
 
 <style scoped>
 #actions {

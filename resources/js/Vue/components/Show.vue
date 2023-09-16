@@ -4,7 +4,7 @@ import ItemShow from "../Pages/Item/Show.vue";
 export default {
     data() {
         return {
-            showPageTitle: this.$route.params.showable.toString(),
+            showPageTitle: this.$route.params.showable.toString()
         };
     },
     computed: {
@@ -17,6 +17,12 @@ export default {
             }
         },
     },
+    created() {
+        this.$watch(()=> this.$route.params.showable,(to,from)=>{
+            console.log('to:',to,' from: ',from)
+            this.showPageTitle = to?.at(0) || from.at(0)
+        })
+    }
 };
 </script>
 
@@ -30,7 +36,7 @@ export default {
             ></v-btn>
             <h1 class="proper text-h4">{{ showPageTitle }} information</h1>
         </div>
-        <component :is="getShowableComponent"></component>
+        <component :is="getShowableComponent" ></component>
     </v-container>
 </template>
 

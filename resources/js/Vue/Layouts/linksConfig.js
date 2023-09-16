@@ -18,12 +18,6 @@ export const links = [
         icon: "mdi-account-group-outline",
     },
     {
-        to: "/employee-inventory",
-        title: "Employees Inventory",
-        value: "employeesInventory",
-        icon: "mdi-account-details-outline",
-    },
-    {
         to: "/category",
         title: "Device Types",
         value: "deviceTypes",

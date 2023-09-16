@@ -7,6 +7,8 @@ use App\Http\Resources\ItemResource;
 use App\Models\Category;
 use App\Models\Item;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
 
 class ItemController extends Controller
 {
@@ -73,7 +75,8 @@ class ItemController extends Controller
             ...$request->all(),
             ...$request->validate([
                 'model' => 'required',
-                'brand' => 'required'
+                'brand' => 'required',
+                'condition' => ['required', Rule::in(['working', 'damaged', 'broken'])]
             ])
         ]);
 

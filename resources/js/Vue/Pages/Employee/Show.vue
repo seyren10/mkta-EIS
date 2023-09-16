@@ -57,7 +57,7 @@ export default {
                                 :key="index"
                             >
                                 <td>{{ item.category.name }}</td>
-                                <td>{{ item.brand }}</td>
+                                <td><router-link :to="`/item/${item.id}/show`" class="text-blue-lighten-1">{{ item.brand }}</router-link> </td>
                                 <td>{{ item.model }}</td>
                             </tr>
                         </tbody>

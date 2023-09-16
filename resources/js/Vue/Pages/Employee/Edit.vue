@@ -32,9 +32,10 @@ export default {
     <v-row justify="center">
         <v-dialog
             v-model="dialog"
-            fullscreen
             :scrim="false"
             transition="dialog-bottom-transition"
+            style="max-width: 30rem"
+            persistent
         >
             <template v-slot:activator="{ props }">
                 <v-btn
@@ -50,13 +51,6 @@ export default {
                     <v-toolbar-title>Edit Employee</v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-toolbar-items>
-                        <v-btn
-                            variant="text"
-                            color="blue-lighten-1"
-                            @click="dialog = false"
-                        >
-                            Update
-                        </v-btn>
                         <v-btn variant="text" @click="dialog = false">
                             cancel
                         </v-btn>
