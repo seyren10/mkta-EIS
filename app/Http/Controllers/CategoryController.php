@@ -20,6 +20,7 @@ class CategoryController extends Controller
         $query = QueryBuilder::for(Category::class)
             ->allowedSorts('name')
             ->defaultSort('-created_at')
+            ->withCount(['items'])
             ->get();
 
         // $categories = Category::orderByDesc('created_at')->get(['id', 'name', 'description']);

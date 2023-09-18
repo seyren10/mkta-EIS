@@ -1,66 +1,56 @@
 <script>
 import Create from "./Create.vue";
 import Edit from "./Edit.vue";
-import { ref } from "vue";
+import { useCategoryStore } from "../../stores/categoryStore";
+import { useItemStore } from "../../stores/itemStore";
+import { storeToRefs } from "pinia";
+
 export default {
     async setup() {
-        const res = await axios.get("api/category");
-        const categories = ref(res.data);
+        const categoryStore = useCategoryStore();
+        const { categories } = storeToRefs(categoryStore);
+        await categoryStore.getCategories();
 
+        const itemStore = useItemStore();
+        await itemStore.getItems();
+
+        const { getItemCountByCategory } = storeToRefs(itemStore);
         return {
             categories,
+            categoryStore,
+            itemStore,
+            getItemCountByCategory,
         };
     },
-    data() {
-        return {
-            mounted: false,
-        };
-    },
-    mounted() {
-        this.mounted = true;
-    },
-    methods: {
-        async fetchCategories() {
-            const res = await axios.get("api/category");
-            this.categories = res.data;
-        },
-    },
+    methods: {},
     components: { Create, Edit },
 };
 </script>
 
 <template>
+    <div class="actions">
+        <Create></Create>
+    </div>
     <v-table>
         <thead>
             <tr>
                 <th>Name</th>
                 <th>Description</th>
+                <th>Device Count</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            <tr v-for="(category, index) in categories.data" :key="index">
+            <tr v-for="category in categories" :key="category.id">
                 <td>{{ category.name }}</td>
                 <td>{{ category.description }}</td>
+                <td>{{ category.items_count }}</td>
                 <td>
-                    <Edit
-                        :category="category"
-                        @updated="fetchCategories"
-                    ></Edit>
+                    <Edit :category="category"></Edit>
                 </td>
             </tr>
         </tbody>
     </v-table>
-
-    <Teleport to="#actions" v-if="mounted">
-        <div class="actions">
-            <Create @created="fetchCategories"></Create>
-        </div>
-    </Teleport>
 </template>
 
-<style scoped>
-.actions {
-    margin-inline-end: 1rem;
-}
-</style>
+<style scoped></style>

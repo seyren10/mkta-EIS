@@ -1,5 +1,13 @@
 <script>
+import { useItemStore } from "../../stores/itemStore";
+import { storeToRefs } from "pinia";
 export default {
+    setup() {
+        const itemStore = useItemStore();
+        const { errors, isLoading } = storeToRefs(itemStore);
+
+        return { errors, isLoading, itemStore };
+    },
     props: {
         categories: Array,
     },
@@ -15,36 +23,27 @@ export default {
                     ? 1
                     : "No Category Available",
                 condition: "working",
-                errors: {},
             },
-            isLoading: false,
         };
     },
-    watch: {
-        dialog(newC, oldC) {
-            console.log(this.categories);
-        },
-    },
+
     methods: {
         async create() {
-            try {
-                this.isLoading = true;
-                const res = await axios.post("/api/item", this.form);
-                this.dialog = false;
+            await this.itemStore.postItem(this.form);
+
+            if (!Object.keys(this.errors).length) {
                 this.form = {
                     brand: null,
                     model: null,
                     serial_no: null,
-                    category_id: null,
                     mk_tag_no: null,
-                    errors: {},
+                    category_id: this.categories.length
+                        ? 1
+                        : "No Category Available",
+                    condition: "working",
                 };
-                this.$emit("created");
-            } catch (error) {
-                console.log(error.response);
-                this.form.errors = error.response.data.errors;
-            } finally {
-                this.isLoading = false;
+
+                this.dialog = false;
             }
         },
     },
@@ -52,7 +51,7 @@ export default {
 </script>
 
 <template>
-    <v-row justify="center">
+    <v-row justify="start" class="py-2">
         <v-dialog
             v-model="dialog"
             :scrim="false"
@@ -66,6 +65,7 @@ export default {
                     dark
                     v-bind="props"
                     prepend-icon="mdi-plus"
+                    size="small"
                 >
                     Add Item
                 </v-btn>
@@ -104,8 +104,8 @@ export default {
                                     label="Brand*"
                                     required
                                     v-model="form.brand"
-                                    :error="form.errors.brand ? true : false"
-                                    :error-messages="form.errors.brand"
+                                    :error="errors.brand ? true : false"
+                                    :error-messages="errors.brand"
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12">
@@ -113,8 +113,8 @@ export default {
                                     label="Device Model*"
                                     required
                                     v-model="form.model"
-                                    :error="form.errors.model ? true : false"
-                                    :error-messages="form.errors.model"
+                                    :error="errors.model ? true : false"
+                                    :error-messages="errors.model"
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12">

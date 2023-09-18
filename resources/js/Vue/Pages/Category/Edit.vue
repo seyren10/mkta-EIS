@@ -1,5 +1,13 @@
 <script>
+import { useCategoryStore } from "../../stores/categoryStore";
+import { storeToRefs } from "pinia";
 export default {
+    setup() {
+        const categoryStore = useCategoryStore();
+        const { errors, isLoading } = storeToRefs(categoryStore);
+
+        return { categoryStore, errors, isLoading };
+    },
     props: {
         category: Object,
     },
@@ -9,25 +17,22 @@ export default {
             form: {
                 name: this.category.name,
                 description: this.category.description,
-                errors: {},
             },
         };
     },
     methods: {
         async update() {
-            try {
-                const res = await axios.put(
-                    `/api/category/${this.category.id}`,
-                    this.form
-                );
-                if (res.status === 200) {
-                    this.dialog = false;
-                    this.form = { name: null, description: null, errors: {} };
-                    this.$emit("updated");
-                }
-            } catch (error) {
-                console.log(error.response.data.errors);
-                this.form.errors = error.response.data.errors;
+            await this.categoryStore.updateCategory(
+                this.category.id,
+                this.form
+            );
+
+            if (!Object.keys(this.errors).length) {
+                this.form = {
+                    name: this.category.name,
+                    description: this.category.description,
+                };
+                this.dialog = false;
             }
         },
     },
@@ -38,7 +43,8 @@ export default {
     <v-row justify="center">
         <v-dialog
             v-model="dialog"
-            fullscreen
+            persistent
+            style="max-width: 30rem"
             :scrim="false"
             transition="dialog-bottom-transition"
         >
@@ -58,13 +64,6 @@ export default {
                     <v-toolbar-title>Update Category</v-toolbar-title>
                     <v-spacer></v-spacer>
                     <v-toolbar-items>
-                        <v-btn
-                            variant="text"
-                            color="blue-lighten-1"
-                            @click="dialog = false"
-                        >
-                            Update
-                        </v-btn>
                         <v-btn variant="text" @click="dialog = false">
                             cancel
                         </v-btn>
@@ -78,8 +77,8 @@ export default {
                                 <v-text-field
                                     label="Name*"
                                     v-model="form.name"
-                                    :error="form.errors.name"
-                                    :error-messages="form.errors.name"
+                                    :error="errors.name"
+                                    :error-messages="errors.name"
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12">
@@ -95,6 +94,7 @@ export default {
                                     variant="flat"
                                     color="blue-lighten-1"
                                     type="submit"
+                                    :loading="isLoading"
                                     >Update Category</v-btn
                                 ></v-col
                             >

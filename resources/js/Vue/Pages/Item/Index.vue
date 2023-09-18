@@ -4,31 +4,36 @@ import Create from "./Create.vue";
 import Edit from "./Edit.vue";
 import Associate from "./Associate.vue";
 import { ref } from "vue";
+import { useItemStore } from "../../stores/itemStore";
+import { useEmployeeInventoryStore } from "../../stores/employeeInventoryStore";
+import { storeToRefs } from "pinia";
 
 export default {
     async setup() {
-        const itemRes = await axios.get("/api/item");
-        const items = ref(itemRes.data.data);
+        const itemStore = useItemStore();
+        const { items } = storeToRefs(itemStore);
+        itemStore.getItems();
 
         const categoryRes = await axios.get("/api/category");
         const categories = ref(categoryRes.data.data);
 
+        const employeeInventoryStore = useEmployeeInventoryStore();
+
         return {
             items,
             categories,
+            employeeInventoryStore,
+            itemStore,
         };
     },
     components: { VDataTable, Create, Edit, Associate },
     data() {
         return {
-            mounted: false,
             search: "",
             headers: [
                 { key: "category", title: "Category" },
                 { key: "brand", title: "Brand" },
                 { key: "model", title: "Model" },
-                // { key: "serial_no", title: "Serial Number" },
-                // { key: "mk_tag_no", title: "MK Tag Number" },
                 { key: "condition", title: "Condition" },
                 { key: "employee_name", title: "Active user" },
                 { key: "device_association", title: "Device Association" },
@@ -50,38 +55,33 @@ export default {
         },
     },
     methods: {
-        fetchItem() {
-            axios
-                .get("/api/item")
-                .then((res) => {
-                    this.items = res.data.data;
-                })
-                .catch((err) => {});
-        },
         async fetchCategories() {
             try {
                 const res = await axios.get("/api/category");
                 this.categories = res.data.data;
             } catch (e) {}
         },
+
         async surrender(itemData) {
-            const res = await axios.post("/api/employee-inventory/dissociate", {
+            console.log(itemData);
+            this.employeeInventoryStore.deleteEmployeeInventories({
                 surrendered_date: new Date().toISOString().split("T")[0],
                 officer_in_charge: "Manuelito Dayrit",
                 is_active: 0,
                 item_id: itemData.id,
                 employee_id: itemData.employee_id,
             });
-            console.log(res);
+
+            this.itemStore.getItems();
         },
-    },
-    mounted() {
-        this.mounted = true;
     },
 };
 </script>
 
 <template>
+    <div>
+        <Create :categories="categories"></Create>
+    </div>
     <v-card>
         <v-card-title>
             Items
@@ -123,7 +123,6 @@ export default {
                         :categories="categories"
                         :item="item.selectable"
                         :key="Math.random()"
-                        @updated="fetchItem"
                     />
                 </div>
             </template>
@@ -179,18 +178,13 @@ export default {
                         color="blue-lighten-1"
                         size="small"
                         @click="() => surrender(item.selectable)"
+                        :loading="employeeInventoryStore.isLoading"
                         >Surrender</v-btn
                     >
                 </div>
             </template>
         </VDataTable>
     </v-card>
-
-    <Teleport to="#actions" v-if="mounted">
-        <div class="actions">
-            <Create :categories="categories" @created="fetchItem"></Create>
-        </div>
-    </Teleport>
 </template>
 
 <style scoped>

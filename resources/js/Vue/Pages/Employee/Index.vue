@@ -2,19 +2,22 @@
 import { VDataTable } from "vuetify/labs/VDataTable";
 import Create from "./Create.vue";
 import Edit from "./Edit.vue";
-import { ref } from "vue";
+import { useEmployeeStore } from "../../stores/employeeStore";
+import { storeToRefs } from "pinia";
+
 export default {
     async setup() {
-        const res = await axios.get("/api/employee");
-        const employees = ref(res.data.data);
+        const employeeStore = useEmployeeStore();
+        const { employees } = storeToRefs(employeeStore);
 
-        return { employees };
+        await employeeStore.getEmployees();
+
+        return { employees, employeeStore };
     },
     components: { VDataTable, Create, Edit },
     data() {
         return {
             search: "",
-            mounted: false,
 
             headers: [
                 { key: "employee_no", title: "Employee Number" },
@@ -24,20 +27,13 @@ export default {
             ],
         };
     },
-    methods: {
-        async fetchEmployees() {
-            const res = await axios.get("/api/employee");
-            this.employees = res.data.data;
-        },
-    },
-
-    mounted() {
-        this.mounted = true;
-    },
 };
 </script>
 
 <template>
+    <div>
+        <Create @created="employeeStore.getEmployees()"></Create>
+    </div>
     <v-card>
         <v-card-title>
             Employees
@@ -83,11 +79,6 @@ export default {
             </template>
         </VDataTable>
     </v-card>
-    <Teleport to="#actions" v-if="mounted">
-        <div class="actions">
-            <Create @created="fetchEmployees"></Create>
-        </div>
-    </Teleport>
 </template>
 
 <style scoped>

@@ -1,38 +1,37 @@
 <script>
+import { useEmployeeStore } from "../../stores/employeeStore";
+import { storeToRefs } from "pinia";
 export default {
+    setup() {
+        const employeeStore = useEmployeeStore();
+        const { errors, isLoading } = storeToRefs(employeeStore);
+
+        return { employeeStore, errors, isLoading };
+    },
     data() {
         return {
             dialog: false,
-            isLoading: false,
             form: {
                 employee_no: null,
                 RFID_no: null,
                 full_name: null,
                 is_active: true,
-                errors: {},
             },
         };
     },
     methods: {
         async create() {
-            try {
-                this.isLoading = true;
-                const res = await axios.post("/api/employee", this.form);
+            await this.employeeStore.postEmployee(this.form);
 
-                this.dialog = false;
+            //close the dialog of there's no error
+            if (!Object.keys(this.errors).length) {
                 this.form = {
                     employee_no: null,
                     RFID_no: null,
                     full_name: null,
                     is_active: true,
-                    errors: {},
                 };
-                this.$emit("created");
-            } catch (error) {
-                console.log(error.response);
-                this.form.errors = error.response.data.errors;
-            } finally {
-                this.isLoading = false;
+                this.dialog = false;
             }
         },
         handleKeyEnter(e) {
@@ -45,7 +44,7 @@ export default {
 </script>
 
 <template>
-    <v-row justify="center">
+    <v-row class="py-2">
         <v-dialog
             v-model="dialog"
             :scrim="false"
@@ -59,6 +58,7 @@ export default {
                     dark
                     v-bind="props"
                     prepend-icon="mdi-plus"
+                    size="small"
                 >
                     Register employee
                 </v-btn>
@@ -84,10 +84,8 @@ export default {
                                     label="Employee Number*"
                                     required
                                     v-model="form.employee_no"
-                                    :error="
-                                        form.errors?.employee_no ? true : false
-                                    "
-                                    :error-messages="form.errors.employee_no"
+                                    :error="errors?.employee_no ? true : false"
+                                    :error-messages="errors.employee_no"
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12">
@@ -98,8 +96,8 @@ export default {
                                     hint="Put the ID over the RFID scanner to automatically generate RFID number."
                                     persistent-hint
                                     @keydown.enter="handleKeyEnter"
-                                    :error="form.errors?.RFID_no ? true : false"
-                                    :error-messages="form.errors.RFID_no"
+                                    :error="errors?.RFID_no ? true : false"
+                                    :error-messages="errors.RFID_no"
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12">
@@ -107,10 +105,8 @@ export default {
                                     label="Full Name*"
                                     required
                                     v-model="form.full_name"
-                                    :error="
-                                        form.errors?.full_name ? true : false
-                                    "
-                                    :error-messages="form.errors.full_name"
+                                    :error="errors?.full_name ? true : false"
+                                    :error-messages="errors.full_name"
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12"

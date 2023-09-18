@@ -33,7 +33,6 @@ export default {
             <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
             <v-app-bar-title>MK Themed Attractions phils. inc.</v-app-bar-title>
-            <div id="actions"></div>
         </v-app-bar>
 
         <v-main class="bg-grey-lighten-5">

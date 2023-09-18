@@ -17,12 +17,12 @@ export default {
             const res = await axios.get(
                 `/api/employee-inventory/${this.$route.params.id}`
             );
-            this.employeeInventory = res.data.data
+            this.employeeInventory = res.data.data;
         },
         transferType(isActive) {
             if (isActive) {
-                return "Associate";
-            } else return "Dissociate";
+                return "Transfer";
+            } else return "Surrender";
         },
     },
     created() {
@@ -166,7 +166,10 @@ export default {
                             }}</v-chip>
                         </td>
                         <td>
-                            <router-link :to="`/employee/${ei.by_employee.id}/show`" class="text-blue-lighten-1">
+                            <router-link
+                                :to="`/employee/${ei.by_employee.id}/show`"
+                                class="text-blue-lighten-1"
+                            >
                                 {{ ei.by_employee.full_name }}
                             </router-link>
                         </td>
@@ -176,4 +179,3 @@ export default {
         </v-card>
     </v-container>
 </template>
-

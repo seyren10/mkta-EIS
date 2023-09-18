@@ -1,5 +1,12 @@
 <script>
+import { useItemStore } from "../../stores/itemStore";
+import { storeToRefs } from "pinia";
 export default {
+    setup() {
+        const itemStore = useItemStore();
+        const { errors, isLoading } = storeToRefs(itemStore);
+        return { itemStore, isLoading, errors };
+    },
     props: {
         categories: Array,
         item: Object,
@@ -14,34 +21,15 @@ export default {
                 mk_tag_no: this.item.mk_tag_no,
                 category_id: this.item.category_id,
                 condition: this.item.condition,
-                errors: {},
             },
-            isLoading: false,
         };
     },
     methods: {
         async update() {
-            try {
-                this.isLoading = true;
-                const res = await axios.put(
-                    `/api/item/${this.item.id}`,
-                    this.form
-                );
+            await this.itemStore.updateItem(this.item.id, this.form);
+
+            if (!Object.keys(this.errors).length) {
                 this.dialog = false;
-                this.form = {
-                    brand: null,
-                    model: null,
-                    serial_no: null,
-                    category_id: 1,
-                    mk_tag_no: null,
-                    errors: {},
-                };
-                this.$emit("updated");
-            } catch (error) {
-                console.log(error.response);
-                this.form.errors = error.response.data.errors;
-            } finally {
-                this.isLoading = false;
             }
         },
     },
@@ -101,8 +89,8 @@ export default {
                                     label="Brand*"
                                     required
                                     v-model="form.brand"
-                                    :error="form.errors.brand ? true : false"
-                                    :error-messages="form.errors.brand"
+                                    :error="errors.brand ? true : false"
+                                    :error-messages="errors.brand"
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12">
@@ -110,8 +98,8 @@ export default {
                                     label="Device Model*"
                                     required
                                     v-model="form.model"
-                                    :error="form.errors.model ? true : false"
-                                    :error-messages="form.errors.model"
+                                    :error="errors.model ? true : false"
+                                    :error-messages="errors.model"
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12">
@@ -132,10 +120,8 @@ export default {
                                     label="Device Condition"
                                     :items="['working', 'damaged', 'broken']"
                                     v-model="form.condition"
-                                    :error="
-                                        form.errors.condition ? true : false
-                                    "
-                                    :error-messages="form.errors.condition"
+                                    :error="errors.condition ? true : false"
+                                    :error-messages="errors.condition"
                                 >
                                 </v-select>
                             </v-col>

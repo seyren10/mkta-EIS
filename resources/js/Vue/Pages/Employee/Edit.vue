@@ -1,5 +1,14 @@
 <script>
+import { useEmployeeStore } from "../../stores/employeeStore";
+import { storeToRefs } from "pinia";
+
 export default {
+    setup() {
+        const employeeStore = useEmployeeStore();
+        const { errors, isLoading } = storeToRefs(employeeStore);
+
+        return { employeeStore, errors, isLoading };
+    },
     props: {
         employee: Object,
     },
@@ -16,7 +25,20 @@ export default {
         };
     },
     methods: {
-        async update() {},
+        async update() {
+            await this.employeeStore.updateEmployee(this.form.id, this.form);
+
+            if (!Object.keys(this.errors).length) {
+                this.dialog = false;
+                this.form = {
+                    id: null,
+                    employee_no: null,
+                    full_name: null,
+                    RFID_no: null,
+                    is_active: null,
+                };
+            }
+        },
 
         handleKeyEnter: (e) => {
             e.preventDefault();
@@ -24,7 +46,6 @@ export default {
             return false;
         },
     },
-    created() {},
 };
 </script>
 
@@ -65,6 +86,8 @@ export default {
                                     label="Employee Number*"
                                     required
                                     v-model="form.employee_no"
+                                    :errors="errors?.employee_no ? true : false"
+                                    :errors-messages="errors.employee_no"
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12">
@@ -74,6 +97,8 @@ export default {
                                     v-model="form.RFID_no"
                                     hint="Put the ID over the RFID scanner to automatically generate RFID number."
                                     persistent-hint
+                                    :errors="errors?.RFID_no ? true : false"
+                                    :errors-messages="errors.RFID_no"
                                     @keydown.enter="handleKeyEnter"
                                 ></v-text-field>
                             </v-col>
@@ -82,6 +107,8 @@ export default {
                                     label="Full Name*"
                                     required
                                     v-model="form.full_name"
+                                    :errors="errors?.full_name ? true : false"
+                                    :errors-messages="errors.full_name"
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12">
@@ -98,6 +125,8 @@ export default {
                                     :label="`Status: ${
                                         form.is_active ? 'active' : 'inactive'
                                     }`"
+                                    :errors="errors?.is_active ? true : false"
+                                    :errors-messages="errors.is_active"
                                 ></v-switch>
                             </v-col>
                             <v-col cols="12"
@@ -106,7 +135,7 @@ export default {
                                     variant="flat"
                                     color="blue-lighten-1"
                                     type="submit"
-                                    :loading="form.processing"
+                                    :loading="isLoading"
                                     >Update Employee</v-btn
                                 ></v-col
                             >

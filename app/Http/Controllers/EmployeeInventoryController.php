@@ -22,7 +22,7 @@ class EmployeeInventoryController extends Controller
   public function show(Item $item)
   {
     return response()->json([
-      'data' =>Item::find($item)->first()->employeeInventories->load(['byEmployee'])
+      'data' => Item::find($item)->first()->employeeInventories->load(['byEmployee'])
     ]);
   }
 
@@ -52,7 +52,7 @@ class EmployeeInventoryController extends Controller
     EmployeeInventory::create([
       ...$request->all(),
       ...$request->validate([
-        'surrendered_date' => ['date'],
+        'transferred_date' => ['date'],
         'officer_in_charge' => ['required', 'string'],
         'item_id' => ['required', 'integer'],
         'employee_id' => ['required', 'integer'],

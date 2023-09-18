@@ -1,7 +1,29 @@
 <script>
+import { useEmployeeStore } from "../../stores/employeeStore";
+import { useEmployeeInventoryStore } from "../../stores/employeeInventoryStore";
+import { useItemStore } from "../../stores/itemStore";
+import { storeToRefs } from "pinia";
 import { VDatePicker } from "vuetify/labs/VDatePicker";
 import { VDataTable } from "vuetify/lib/labs/VDataTable/index.mjs";
 export default {
+    setup() {
+        const employeeStore = useEmployeeStore();
+        const employeeInventoryStore = useEmployeeInventoryStore();
+        const itemStore = useItemStore();
+
+        const { errors, isLoading, employeeInventories } = storeToRefs(
+            employeeInventoryStore
+        );
+
+        return {
+            employeeStore,
+            employeeInventoryStore,
+            errors,
+            isLoading,
+            employeeInventories,
+            itemStore,
+        };
+    },
     components: { VDatePicker, VDataTable },
     props: {
         item: Object,
@@ -9,48 +31,32 @@ export default {
     data() {
         return {
             form: {
-                transferred_date: null,
+                transferred_date: new Date().toISOString().split("T")[0],
                 officer_in_charge: "Manuelito Dayrit",
                 is_active: 1,
                 item_id: this.item.id,
                 employee_id: null,
-                errors: {},
             },
-            employees: [],
             dialog: false,
-            isLoading: false,
             search: "",
-            searchResult: [],
+            employees: [],
         };
     },
     methods: {
-        async fetchEmployees() {
-            const res = await axios.get("/api/employee");
-
-            this.employees = res.data.data.filter((emp) => emp.is_active);
-            this.searchResult = this.employees;
-        },
-        searchEmployee() {
-            this.searchResult = this.employees.filter((emp) => {
-                return emp.full_name.customIncludes(this.search);
-            });
-        },
         async create() {
-            try {
-                this.isLoading = true;
-                const res = await axios.post(
-                    "/api/employee-inventory",
-                    this.form
-                );
-            } catch (error) {
-                this.form.errors = error.response.data.errors;
-            } finally {
-                this.isLoading = false;
+            await this.employeeInventoryStore.postEmployeeInventories(
+                this.form
+            );
+
+            if (!Object.keys(this.errors).length) {
+                this.itemStore.getItems();
+                this.dialog = false;
             }
         },
     },
-    created() {
-        this.fetchEmployees();
+    async created() {
+        await this.employeeStore.getEmployees();
+        this.employees = this.employeeStore.activeEmployees;
     },
 };
 </script>
@@ -92,8 +98,10 @@ export default {
                 <v-container style="max-width: 50rem">
                     <v-row>
                         <v-form style="width: 100%" @submit.prevent="create">
-                            <v-col cols="12">
+                            <v-col cols="12" class="date">
+                                <label for="date">Date of transfer</label>
                                 <input
+                                    id="date"
                                     type="date"
                                     v-model="form.transferred_date"
                                 />
@@ -117,26 +125,20 @@ export default {
                                 ></v-text-field>
                             </v-col>
                             <v-col cols="12">
-                                <v-text-field
-                                    label="Search"
-                                    append-icon="mdi-magnify"
-                                    placeholder="Search for ID, RFID or name..."
-                                    v-model="search"
-                                    @keydown.enter="searchEmployee"
-                                ></v-text-field>
-                                <v-select
-                                    label="Active Employee"
-                                    required
-                                    v-model="form.employee_id"
+                                <v-autocomplete
+                                    label="Assign to employee"
                                     :items="
-                                        searchResult.map((c) => {
+                                        employees.map((emp) => {
                                             return {
-                                                title: c.full_name,
-                                                value: c.id,
+                                                title: emp.full_name,
+                                                value: emp.id,
                                             };
                                         })
                                     "
-                                ></v-select>
+                                    v-model="form.employee_id"
+                                    :error="errors?.employee_id ? true : false"
+                                    :error-messages="errors.employee_id"
+                                ></v-autocomplete>
                             </v-col>
                             <v-col cols="12"
                                 ><v-btn
@@ -155,3 +157,18 @@ export default {
         </v-dialog>
     </v-row>
 </template>
+
+<style scoped>
+.date {
+    display: grid;
+}
+.date > label {
+    font-size: 0.8rem;
+    color: rgb(110, 110, 110);
+}
+.date > input[type="date"] {
+    background-color: rgb(247, 247, 247);
+    padding: 0.8rem 0.3rem;
+    border-radius: 0.3em;
+}
+</style>

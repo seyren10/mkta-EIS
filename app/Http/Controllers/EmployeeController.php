@@ -9,18 +9,7 @@ use Illuminate\Http\Request;
 class EmployeeController extends Controller
 {
 
-    private function validateFields($request)
-    {
-        return [
-            ...$request->all(),
-            ...$request->validate([
-                'employee_no' => 'required',
-                'RFID_no' => 'required|min_digits:10',
-                'full_name' => 'required',
-                'is_active' => 'required'
-            ])
-        ];
-    }
+
 
     /**
      * Display a listing of the resource.
@@ -43,7 +32,15 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        Employee::create($this->validateFields($request));
+        Employee::create([
+            ...$request->all(),
+            ...$request->validate([
+                'employee_no' => 'required',
+                'RFID_no' => 'required|min_digits:10',
+                'full_name' => 'required',
+                'is_active' => 'required'
+            ])
+        ]);
         return response()->noContent();
     }
 
@@ -71,7 +68,15 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, Employee $employee)
     {
-        $employee->update($this->validateFields($request));
+        $employee->update([
+            ...$request->all(),
+            ...$request->validate([
+                'employee_no' => 'required',
+                'RFID_no' => 'required|min_digits:10',
+                'full_name' => 'required',
+                'is_active' => 'required'
+            ])
+        ]);
 
 
         return response()->noContent();
