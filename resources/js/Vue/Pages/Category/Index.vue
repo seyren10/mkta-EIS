@@ -44,7 +44,9 @@ export default {
             <tr v-for="category in categories" :key="category.id">
                 <td>{{ category.name }}</td>
                 <td>{{ category.description }}</td>
-                <td>{{ category.items_count }}</td>
+                <td>
+                    <v-chip>{{ category.items_count }}</v-chip>
+                </td>
                 <td>
                     <Edit :category="category"></Edit>
                 </td>

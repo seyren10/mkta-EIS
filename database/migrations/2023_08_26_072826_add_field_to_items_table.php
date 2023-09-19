@@ -16,8 +16,10 @@ return new class extends Migration
             $table->string('model');
             $table->string('serial_no')->nullable();
             $table->string('mk_tag_no')->nullable();
+            $table->date('date_purchased');
+            $table->integer('accountability_no');
             $table->json('json_attr')->nullable();
-            $table->enum('condition', ['working', 'damaged', 'broken'])->default('working');
+            $table->enum('status', ['good', 'fair', 'bad', 'for disposal', 'disposed'])->default('good');
         });
     }
 
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropColumns('items', ['brand', 'model', 'serial_no', 'mk_tag_no', 'json_attr']);
+        Schema::dropColumns('items', ['brand', 'model', 'serial_no', 'mk_tag_no', 'json_attr', 'status', 'date_purchased', 'accountability_no']);
     }
 };

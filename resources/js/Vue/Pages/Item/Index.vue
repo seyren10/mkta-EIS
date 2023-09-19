@@ -63,9 +63,8 @@ export default {
         },
 
         async surrender(itemData) {
-            console.log(itemData);
-            this.employeeInventoryStore.deleteEmployeeInventories({
-                surrendered_date: new Date().toISOString().split("T")[0],
+            this.employeeInventoryStore.postEmployeeInventories({
+                transferred_date: new Date().toISOString().split("T")[0],
                 officer_in_charge: "Manuelito Dayrit",
                 is_active: 0,
                 item_id: itemData.id,

@@ -17,7 +17,10 @@ class Item extends Model
         'mk_tag_no',
         'category_id',
         'employee_id',
-        'condition'
+        'status',
+        'accountability_no',
+        'date_purchased',
+        'json_attr'
     ];
 
     protected $hidden = [

@@ -10,7 +10,7 @@ class EmployeeInventory extends Model
     use HasFactory;
 
     protected $fillable = [
-        'transferred_date', 'surrendered_date', 'officer_in_charge', 'is_active', 'json_attr', 'item_id', 'employee_id'
+        'transferred_date', 'officer_in_charge', 'is_active', 'json_attr', 'item_id', 'employee_id'
     ];
 
     public function byEmployee()

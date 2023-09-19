@@ -40,29 +40,17 @@ class EmployeeInventoryController extends Controller
     ]);
 
 
-    Item::find($request->get('item_id'))->update(
-      $request->validate(['employee_id' => ['integer']])
-    );
+    $item =   Item::find($request->get('item_id'));
 
-
-    return response()->noContent();
-  }
-  public function dissociate(Request $request)
-  {
-    EmployeeInventory::create([
-      ...$request->all(),
-      ...$request->validate([
-        'transferred_date' => ['date'],
-        'officer_in_charge' => ['required', 'string'],
-        'item_id' => ['required', 'integer'],
-        'employee_id' => ['required', 'integer'],
-      ])
-    ]);
-
-
-    Item::find($request->get('item_id'))->update(
-      ['employee_id' => null]
-    );
+    if ($request->is_active) {
+      $item->update(
+        $request->validate(['employee_id' => ['integer']])
+      );
+    } else {
+      $item->update(
+        ['employee_id' => null]
+      );
+    }
 
     return response()->noContent();
   }

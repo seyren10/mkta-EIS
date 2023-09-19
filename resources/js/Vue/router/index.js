@@ -31,6 +31,11 @@ export const router = createRouter({
                     component: () => import("../Pages/Employee/Index.vue"),
                 },
                 {
+                    path: "location",
+                    name: "location",
+                    component: () => import("../Pages/Location/Index.vue"),
+                },
+                {
                     path: "/:showable+/:id/show",
                     name: "show",
                     component: () => import("../components/Show.vue"),

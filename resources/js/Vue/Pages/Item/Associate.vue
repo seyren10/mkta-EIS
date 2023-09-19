@@ -3,7 +3,6 @@ import { useEmployeeStore } from "../../stores/employeeStore";
 import { useEmployeeInventoryStore } from "../../stores/employeeInventoryStore";
 import { useItemStore } from "../../stores/itemStore";
 import { storeToRefs } from "pinia";
-import { VDatePicker } from "vuetify/labs/VDatePicker";
 import { VDataTable } from "vuetify/lib/labs/VDataTable/index.mjs";
 export default {
     setup() {
@@ -24,7 +23,7 @@ export default {
             itemStore,
         };
     },
-    components: { VDatePicker, VDataTable },
+    components: { VDataTable },
     props: {
         item: Object,
     },
@@ -99,14 +98,14 @@ export default {
                     <v-row>
                         <v-form style="width: 100%" @submit.prevent="create">
                             <v-col cols="12" class="date">
-                                <label for="date">Date of transfer</label>
+                                <label for="date">Date of transfer*</label>
                                 <input
                                     id="date"
                                     type="date"
                                     v-model="form.transferred_date"
                                 />
-                                <p v-if="form.errors?.transferred_date">
-                                    {{ form.errors.transferred_date }}
+                                <p v-if="form.errors?.date_purchased">
+                                    {{ form.errors.date_purchased }}
                                 </p>
                             </v-col>
                             <v-col cols="12">
@@ -157,18 +156,3 @@ export default {
         </v-dialog>
     </v-row>
 </template>
-
-<style scoped>
-.date {
-    display: grid;
-}
-.date > label {
-    font-size: 0.8rem;
-    color: rgb(110, 110, 110);
-}
-.date > input[type="date"] {
-    background-color: rgb(247, 247, 247);
-    padding: 0.8rem 0.3rem;
-    border-radius: 0.3em;
-}
-</style>

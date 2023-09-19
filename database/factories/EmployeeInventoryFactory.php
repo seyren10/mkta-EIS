@@ -20,7 +20,6 @@ class EmployeeInventoryFactory extends Factory
     {
         return [
             'transferred_date' => fake()->date(),
-            'surrendered_date' => fake()->date(),
             'officer_in_charge' => fake()->firstName(),
             'is_active' => fake()->boolean(80),
             'item_id' => Item::factory(),

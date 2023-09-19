@@ -23,4 +23,10 @@ export const links = [
         value: "deviceTypes",
         icon: "mdi-shape-plus-outline",
     },
+    {
+        to: "/location",
+        title: "Locations",
+        value: "locations",
+        icon: "mdi-map-marker-outline",
+    },
 ];
