@@ -7,12 +7,13 @@ import { ref } from "vue";
 import { useItemStore } from "../../stores/itemStore";
 import { useEmployeeInventoryStore } from "../../stores/employeeInventoryStore";
 import { storeToRefs } from "pinia";
+import Chip from "../../components/Chip.vue";
 
 export default {
     async setup() {
         const itemStore = useItemStore();
         const { items } = storeToRefs(itemStore);
-        itemStore.getItems();
+        await itemStore.getItems();
 
         const categoryRes = await axios.get("/api/category");
         const categories = ref(categoryRes.data.data);
@@ -26,17 +27,18 @@ export default {
             itemStore,
         };
     },
-    components: { VDataTable, Create, Edit, Associate },
+    components: { VDataTable, Create, Edit, Associate, Chip },
     data() {
         return {
             search: "",
             headers: [
-                { key: "category", title: "Category" },
                 { key: "brand", title: "Brand" },
                 { key: "model", title: "Model" },
-                { key: "condition", title: "Condition" },
+                { key: "status", title: "Status" },
+                { key: "accountability_no", title: "Accountability No." },
                 { key: "employee_name", title: "Active user" },
-                { key: "device_association", title: "Device Association" },
+                { key: "location_from", title: "From" },
+                { key: "location_name", title: "To" },
                 { key: "actions", title: "", sortable: false },
             ],
         };
@@ -50,6 +52,14 @@ export default {
                     category_id: item.category.id,
                     employee_name: item.owned_by_employee?.full_name,
                     employee_id: item.owned_by_employee?.id,
+                    location_id: item.employee_inventories.by_location?.id,
+                    location_name: item.employee_inventories.length
+                        ? item.employee_inventories.at(0).by_location.name
+                        : "MIS Office",
+                    location_from:
+                        item.employee_inventories.length >= 2
+                            ? item.employee_inventories.at(1).by_location.name
+                            : "MIS Office",
                 };
             });
         },
@@ -69,6 +79,7 @@ export default {
                 is_active: 0,
                 item_id: itemData.id,
                 employee_id: itemData.employee_id,
+                location_id: 1,
             });
 
             this.itemStore.getItems();
@@ -100,7 +111,7 @@ export default {
             style="overflow-y: hidden"
         >
             <template #item.actions="{ item }">
-                <div style="display: flex; gap: 2rem; align-items: center">
+                <div style="display: flex; gap: 1rem; align-items: center">
                     <router-link
                         v-if="item.selectable.id"
                         :to="{
@@ -111,13 +122,35 @@ export default {
                             },
                         }"
                     >
-                        <v-btn
-                            color="blue-lighten-4 text-grey-darken-2"
-                            variant="flat"
-                            size="small"
-                            >view device</v-btn
-                        >
+                        <v-tooltip text="View Information" location="left">
+                            <template #activator="{ props }">
+                                <v-btn
+                                    v-bind="props"
+                                    icon="mdi-information-outline"
+                                    variant="flat"
+                                ></v-btn>
+                            </template>
+                        </v-tooltip>
                     </router-link>
+                    <v-tooltip
+                        text="Transfer Device"
+                        v-if="!item.selectable.owned_by_employee"
+                    >
+                        <template #activator="{ props }">
+                            <Associate :item="item.selectable" v-bind="props">
+                            </Associate>
+                        </template>
+                    </v-tooltip>
+
+                    <v-btn
+                        v-else
+                        icon="mdi-cancel"
+                        variant="flat"
+                        class="text-red-lighten-1"
+                        @click="() => surrender(item.selectable)"
+                        :loading="employeeInventoryStore.isLoading"
+                    ></v-btn>
+
                     <Edit
                         :categories="categories"
                         :item="item.selectable"
@@ -126,19 +159,8 @@ export default {
                 </div>
             </template>
 
-            <template #item.condition="{ item }">
-                <v-chip
-                    :color="
-                        item.raw.condition === 'working'
-                            ? 'green'
-                            : item.raw.condition === 'damaged'
-                            ? 'orange'
-                            : 'red'
-                    "
-                    size="small"
-                >
-                    {{ item.raw.condition }}
-                </v-chip>
+            <template #item.status="{ item }">
+                <Chip :list="item.selectable.status" listType="condition" />
             </template>
             <template #item.employee_name="{ item }">
                 <td>
@@ -156,31 +178,8 @@ export default {
                     >
                 </td>
             </template>
-            <template #item.device_association="{ item }">
-                <div
-                    class="d-flex"
-                    style="gap: 1rem"
-                    v-if="item.selectable.condition === 'working'"
-                >
-                    <Associate
-                        v-if="!item.selectable.owned_by_employee"
-                        :item="item.selectable"
-                    >
-                    </Associate>
-
-                    <v-btn
-                        v-else
-                        prepend-icon="mdi-minus"
-                        rounded="2"
-                        elevation="1"
-                        variant="outlined"
-                        color="blue-lighten-1"
-                        size="small"
-                        @click="() => surrender(item.selectable)"
-                        :loading="employeeInventoryStore.isLoading"
-                        >Surrender</v-btn
-                    >
-                </div>
+            <template #item.action="{ item }">
+                <div class="d-flex" style="gap: 1rem"></div>
             </template>
         </VDataTable>
     </v-card>

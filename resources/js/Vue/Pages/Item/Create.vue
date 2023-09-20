@@ -24,7 +24,7 @@ export default {
                 category_id: this.categories.length
                     ? 1
                     : "No Category Available",
-                condition: "good",
+                status: "good",
             },
             additionalData: {
                 processor: null,
@@ -49,18 +49,26 @@ export default {
             await this.itemStore.postItem(this.form);
 
             if (!Object.keys(this.errors).length) {
+                this.dialog = false;
                 this.form = {
                     brand: null,
                     model: null,
                     serial_no: null,
                     mk_tag_no: null,
+                    date_purchased: new Date().toISOString().split("T")[0],
+                    accountability_no: null,
                     category_id: this.categories.length
                         ? 1
                         : "No Category Available",
-                    condition: "working",
+                    condition: "good",
                 };
-
-                this.dialog = false;
+                this.additionalData = {
+                    processor: null,
+                    motherboard: null,
+                    memory: null,
+                    storage: null,
+                    peripherals: null,
+                };
             }
         },
     },
@@ -98,12 +106,9 @@ export default {
                 </v-toolbar>
 
                 <v-container>
-                    <v-row>
-                        <v-col>
-                            <v-form
-                                style="width: 100%"
-                                @submit.prevent="create"
-                            >
+                    <v-form @submit.prevent="create">
+                        <v-row>
+                            <v-col>
                                 <v-col cols="12">
                                     <v-select
                                         label="Category*"
@@ -137,86 +142,89 @@ export default {
                                         :error-messages="errors.model"
                                     ></v-text-field>
                                 </v-col>
-
-                                <v-col cols="12"
-                                    ><v-btn
-                                        block
-                                        variant="flat"
-                                        color="blue-lighten-1"
-                                        type="submit"
-                                        :loading="isLoading"
-                                        >Create Item</v-btn
-                                    ></v-col
-                                >
-                            </v-form>
-                        </v-col>
-                        <v-col>
-                            <v-col cols="12" class="date">
-                                <label for="date">Purchased Date*</label>
-                                <input
-                                    id="date"
-                                    type="date"
-                                    v-model="form.date_purchased"
-                                />
-                                <p v-if="form.errors?.date_purchased">
-                                    {{ form.errors.date_purchased }}
-                                </p>
+                                <v-col cols="12" class="date">
+                                    <label for="date">Purchased Date*</label>
+                                    <input
+                                        id="date"
+                                        type="date"
+                                        v-model="form.date_purchased"
+                                    />
+                                    <p v-if="form.errors?.date_purchased">
+                                        {{ form.errors.date_purchased }}
+                                    </p>
+                                </v-col>
                             </v-col>
-                            <v-col cols="12">
+                            <v-col>
+                                <v-col cols="12">
+                                    <v-text-field
+                                        label="Accountability Number*"
+                                        v-model="form.accountability_no"
+                                        :error="
+                                            errors.accountability_no
+                                                ? true
+                                                : false
+                                        "
+                                        :error-messages="
+                                            errors.accountability_no
+                                        "
+                                    ></v-text-field>
+                                </v-col>
+                                <v-col cols="12">
+                                    <v-text-field
+                                        label="Serial Number"
+                                        hint="usally found at the back of your device"
+                                        v-model="form.serial_no"
+                                    ></v-text-field>
+                                </v-col>
+                                <v-col cols="12">
+                                    <v-text-field
+                                        label="MK Tag Number"
+                                        v-model="form.mk_tag_no"
+                                    ></v-text-field>
+                                </v-col>
+                            </v-col>
+                        </v-row>
+                        <v-row>
+                            <v-col cols="12" v-if="form.category_id === 1">
+                                <h3 class="text-overline">Additional Data</h3>
                                 <v-text-field
-                                    label="Accountability Number*"
-                                    v-model="form.accountability_no"
-                                    :error="
-                                        errors.accountability_no ? true : false
-                                    "
-                                    :error-messages="errors.accountability_no"
+                                    label="Processor"
+                                    placeholder="processor brand,speed,serial number"
+                                    v-model="additionalData.processor"
+                                ></v-text-field>
+                                <v-text-field
+                                    label="Motherboard"
+                                    placeholder="motherboard brand,type,serial number etc..."
+                                    v-model="additionalData.motherboard"
+                                ></v-text-field>
+                                <v-text-field
+                                    label="RAM (Memory)"
+                                    placeholder="RAM brand,memory size,speed, serial number"
+                                    v-model="additionalData.memory"
+                                ></v-text-field>
+                                <v-text-field
+                                    label="HDD/SSD (Storage)"
+                                    placeholder="HDD/SSD brand, storage size, serial number, etc..."
+                                    v-model="additionalData.storage"
+                                ></v-text-field>
+                                <v-text-field
+                                    label="Peripherals"
+                                    placeholder="include mouse,keyboard,speakers, etc... "
+                                    v-model="additionalData.peripherals"
                                 ></v-text-field>
                             </v-col>
-                            <v-col cols="12">
-                                <v-text-field
-                                    label="Serial Number"
-                                    hint="usally found at the back of your device"
-                                    v-model="form.serial_no"
-                                ></v-text-field>
-                            </v-col>
-                            <v-col cols="12">
-                                <v-text-field
-                                    label="MK Tag Number"
-                                    v-model="form.mk_tag_no"
-                                ></v-text-field>
-                            </v-col>
-                        </v-col>
-                    </v-row>
-                    <v-row>
-                        <v-col cols="12" v-if="form.category_id === 1">
-                            <h3 class="text-overline">Additional Data</h3>
-                            <v-text-field
-                                label="Processor"
-                                placeholder="processor brand,speed,serial number"
-                                v-model="additionalData.processor"
-                            ></v-text-field>
-                            <v-text-field
-                                label="Motherboard"
-                                placeholder="motherboard brand,type,serial number etc..."
-                                v-model="additionalData.motherboard"
-                            ></v-text-field>
-                            <v-text-field
-                                label="RAM (Memory)"
-                                placeholder="RAM brand,memory size,speed, serial number"
-                                v-model="additionalData.memory"
-                            ></v-text-field>
-                            <v-text-field
-                                label="HDD/SSD (Storage)"
-                                placeholder="HDD/SSD brand, storage size, serial number, etc..."
-                                v-model="additionalData.storage"
-                            ></v-text-field>
-                            <v-text-field
-                                label="Peripherals"
-                                placeholder="include mouse,keyboard,speakers, etc... "
-                                v-model="additionalData.peripherals"
-                            ></v-text-field>
-                        </v-col>
-                    </v-row>
+                        </v-row>
+                        <v-col cols="12"
+                            ><v-btn
+                                block
+                                variant="flat"
+                                color="blue-lighten-1"
+                                type="submit"
+                                :loading="isLoading"
+                                >Create Item</v-btn
+                            ></v-col
+                        >
+                    </v-form>
                 </v-container>
             </v-card>
         </v-dialog>

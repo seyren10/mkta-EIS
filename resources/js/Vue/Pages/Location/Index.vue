@@ -2,13 +2,17 @@
 import Create from "./Create.vue";
 import { useLocationStore } from "../../stores/locationStore";
 import { storeToRefs } from "pinia";
+import { useItemStore } from "../../stores/itemStore";
 export default {
     async setup() {
         const locationStore = useLocationStore();
         await locationStore.getLocations();
+        const itemStore = useItemStore();
+        await itemStore.getItems();
 
         const { locations, errors, isLoading } = storeToRefs(locationStore);
-        return { locations, locationStore, errors, isLoading };
+        const { items } = storeToRefs(itemStore);
+        return { locations, locationStore, errors, isLoading, items };
     },
     data() {
         return {};
@@ -25,6 +29,17 @@ export default {
                     name: null,
                 };
             }
+        },
+        itemsPerLocationCount(loc) {
+            return this.items.reduce((acc, curr) => {
+                if (
+                    curr.employee_inventories &&
+                    // curr.employee_inventories[0].is_active &&
+                    curr.employee_inventories[0].by_location.name === loc.name
+                ) {
+                    return (acc += 1);
+                } else return acc;
+            }, 0);
         },
     },
 };
@@ -47,6 +62,10 @@ export default {
                         :readOnly="location.id === 1"
                         :loading="isLoading"
                     ></v-text-field>
+                    <span class="text-caption">Deployed Devices:</span>
+                    <v-chip color="blue-darken-1" size="small">{{
+                        itemsPerLocationCount(location)
+                    }}</v-chip>
                 </v-card-text>
 
                 <v-card-actions>

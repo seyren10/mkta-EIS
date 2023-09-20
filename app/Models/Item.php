@@ -20,12 +20,14 @@ class Item extends Model
         'status',
         'accountability_no',
         'date_purchased',
-        'json_attr'
+        'json_attr',
+        'location_id',
     ];
 
     protected $hidden = [
         'category_id',
-        'employee_id'
+        'employee_id',
+        'location_id'
     ];
 
     public function category(): BelongsTo

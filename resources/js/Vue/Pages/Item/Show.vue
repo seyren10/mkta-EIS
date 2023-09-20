@@ -85,6 +85,7 @@ export default {
                 :value="tab.value"
                 :prepend-icon="tab.icon"
                 :key="tab.value"
+                class="text-none"
                 >{{ tab.title }}</v-tab
             >
         </v-tabs>

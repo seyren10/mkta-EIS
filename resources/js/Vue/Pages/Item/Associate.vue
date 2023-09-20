@@ -2,17 +2,22 @@
 import { useEmployeeStore } from "../../stores/employeeStore";
 import { useEmployeeInventoryStore } from "../../stores/employeeInventoryStore";
 import { useItemStore } from "../../stores/itemStore";
+import { useLocationStore } from "../../stores/locationStore";
 import { storeToRefs } from "pinia";
+
 import { VDataTable } from "vuetify/lib/labs/VDataTable/index.mjs";
 export default {
-    setup() {
+    async setup() {
         const employeeStore = useEmployeeStore();
         const employeeInventoryStore = useEmployeeInventoryStore();
         const itemStore = useItemStore();
+        const locationStore = useLocationStore();
+        await locationStore.getLocations();
 
         const { errors, isLoading, employeeInventories } = storeToRefs(
             employeeInventoryStore
         );
+        const { locations } = storeToRefs(locationStore);
 
         return {
             employeeStore,
@@ -21,6 +26,7 @@ export default {
             isLoading,
             employeeInventories,
             itemStore,
+            locations,
         };
     },
     components: { VDataTable },
@@ -35,6 +41,7 @@ export default {
                 is_active: 1,
                 item_id: this.item.id,
                 employee_id: null,
+                location_id: null,
             },
             dialog: false,
             search: "",
@@ -71,14 +78,11 @@ export default {
         >
             <template v-slot:activator="{ props }">
                 <v-btn
-                    prepend-icon="mdi-plus"
-                    rounded="2"
-                    elevation="1"
-                    color="blue-lighten-1"
-                    size="small"
+                    icon="mdi-swap-horizontal"
                     v-bind="props"
+                    variant="flat"
+                    class="text-blue-lighten-1"
                 >
-                    transfer
                 </v-btn>
             </template>
             <v-card>
@@ -137,6 +141,22 @@ export default {
                                     v-model="form.employee_id"
                                     :error="errors?.employee_id ? true : false"
                                     :error-messages="errors.employee_id"
+                                ></v-autocomplete>
+                            </v-col>
+                            <v-col cols="12">
+                                <v-autocomplete
+                                    label="Assign Location"
+                                    :items="
+                                        locations.map((loc) => {
+                                            return {
+                                                title: loc.name,
+                                                value: loc.id,
+                                            };
+                                        })
+                                    "
+                                    v-model="form.location_id"
+                                    :error="errors?.location_id ? true : false"
+                                    :error-messages="errors.location_id"
                                 ></v-autocomplete>
                             </v-col>
                             <v-col cols="12"

@@ -13,7 +13,7 @@ class LocationController extends Controller
     public function index()
     {
         return response()->json([
-            "data" => Location::orderByDesc('created_at')->get()
+            "data" => Location::with(['employeeInventories'])->orderByDesc('created_at')->get()
         ]);
     }
 
@@ -23,13 +23,15 @@ class LocationController extends Controller
      */
     public function store(Request $request)
     {
-        Location::create(
+        $location = Location::create(
             $request->validate([
                 'name' => 'required'
             ])
         );
 
-        return response()->noContent();
+        return response()->json([
+            'data' => $location
+        ]);
     }
 
 
@@ -41,7 +43,9 @@ class LocationController extends Controller
     {
         $location->update($request->validate(['name' => 'required']));
 
-        return response()->noContent();
+        return response()->json([
+            'data' => $location->fresh()
+        ]);
     }
 
     /**
@@ -49,8 +53,10 @@ class LocationController extends Controller
      */
     public function destroy(Location $location)
     {
-        $location->delete();
+        $res =  $location->delete();
 
-        return response()->noContent();
+        return response()->json([
+            'data' => $res
+        ]);
     }
 }

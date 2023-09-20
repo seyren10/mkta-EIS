@@ -17,7 +17,7 @@ class ItemController extends Controller
      */
     public function index()
     {
-        return ItemResource::collection(Item::with(['category', 'ownedByEmployee'])->orderByDesc('created_at')->get());
+        return ItemResource::collection(Item::with(['category', 'ownedByEmployee', 'employeeInventories.byLocation'])->orderByDesc('created_at')->get());
     }
 
     /**
@@ -76,7 +76,9 @@ class ItemController extends Controller
             ...$request->validate([
                 'model' => 'required',
                 'brand' => 'required',
-                'condition' => ['required', Rule::in(['working', 'damaged', 'broken'])]
+                'date_purchased' => 'date|required',
+                'accountability_no' => 'integer|required',
+                'status' => ['required', Rule::in(['good', 'fair', 'bad', 'for disposal', 'disponsed'])]
             ])
         ]);
 

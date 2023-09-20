@@ -10,7 +10,11 @@ class EmployeeInventory extends Model
     use HasFactory;
 
     protected $fillable = [
-        'transferred_date', 'officer_in_charge', 'is_active', 'json_attr', 'item_id', 'employee_id'
+        'transferred_date', 'officer_in_charge', 'is_active', 'json_attr', 'item_id', 'employee_id', 'location_id'
+    ];
+
+    protected $hidden = [
+        'location_id'
     ];
 
     public function byEmployee()
@@ -21,5 +25,10 @@ class EmployeeInventory extends Model
     public function byItem()
     {
         return $this->belongsTo(\App\Models\Item::class, 'item_id');
+    }
+
+    public function byLocation()
+    {
+        return $this->belongsTo(\App\Models\Location::class, 'location_id');
     }
 }

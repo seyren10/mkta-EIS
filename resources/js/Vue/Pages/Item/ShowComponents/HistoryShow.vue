@@ -22,7 +22,8 @@ export default {
                     <th>Tranferred Date</th>
                     <th>Officer in charge</th>
                     <th>Type of Transfer</th>
-                    <th>Assigned employee</th>
+                    <th>Assigned Employee</th>
+                    <th>Assigned Location</th>
                 </tr>
             </thead>
             <tbody>
@@ -41,6 +42,9 @@ export default {
                         >
                             {{ ei.by_employee.full_name }}
                         </router-link>
+                    </td>
+                    <td>
+                        {{ ei.by_location?.name }}
                     </td>
                 </tr>
             </tbody>

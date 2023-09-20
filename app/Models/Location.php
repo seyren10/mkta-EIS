@@ -12,4 +12,9 @@ class Location extends Model
     protected $fillable = [
         'name'
     ];
+
+    public function employeeInventories()
+    {
+        return $this->hasMany(\App\Models\EmployeeInventory::class)->where('is_active', '=', 1);
+    }
 }

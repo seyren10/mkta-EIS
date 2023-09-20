@@ -1,5 +1,7 @@
 <script>
+import Chip from "../../../components/Chip.vue";
 export default {
+    components: { Chip },
     props: {
         item: Object,
     },
@@ -46,19 +48,7 @@ export default {
             <v-list>
                 <v-list-item>
                     <v-list-item-title>
-                        <v-chip
-                            :color="
-                                item.condition === 'working'
-                                    ? 'green'
-                                    : item.condition === 'damaged'
-                                    ? 'orange'
-                                    : 'red'
-                            "
-                            size="small"
-                            label
-                        >
-                            {{ item.condition }}
-                        </v-chip>
+                        <Chip :list="item.status" listType="condition" />
                     </v-list-item-title>
                     <v-list-item-subtitle
                         >Device Condition</v-list-item-subtitle
@@ -74,6 +64,20 @@ export default {
                         </router-link>
                     </v-list-item-title>
                     <v-list-item-subtitle>Active User</v-list-item-subtitle>
+                </v-list-item>
+                <v-list-item>
+                    <v-list-item-title>{{
+                        item.date_purchased
+                    }}</v-list-item-title>
+                    <v-list-item-subtitle>Purchased Date</v-list-item-subtitle>
+                </v-list-item>
+                <v-list-item>
+                    <v-list-item-title>{{
+                        item.accountability_no
+                    }}</v-list-item-title>
+                    <v-list-item-subtitle
+                        >Accountability Number</v-list-item-subtitle
+                    >
                 </v-list-item>
             </v-list>
         </v-col>

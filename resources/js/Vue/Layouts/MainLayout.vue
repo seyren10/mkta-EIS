@@ -32,7 +32,7 @@ export default {
         <v-app-bar density="compact" :elevation="0" class="border-b">
             <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-            <v-app-bar-title>MK Themed Attractions phils. inc.</v-app-bar-title>
+            <v-app-bar-title>MKTA Employee Inventory System</v-app-bar-title>
         </v-app-bar>
 
         <v-main class="bg-grey-lighten-5">
