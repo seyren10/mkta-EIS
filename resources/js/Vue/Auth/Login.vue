@@ -1,44 +1,70 @@
 <script>
+import { storeToRefs } from "pinia";
+import { useUserStore } from "../stores/userStore";
 export default {
+    setup() {
+        const userStore = useUserStore();
+        const { error } = storeToRefs(userStore);
+
+        return { userStore, error };
+    },
     data() {
         return {
             email: null,
             password: null,
+            showPass: false,
         };
     },
     methods: {
-        login() {},
+        async login() {
+            await this.userStore.login(this.email, this.password);
+        },
     },
 };
 </script>
 
 <template>
     <div class="d-flex align-center justify-center" style="height: 100vh">
-        <v-sheet width="400" class="mx-auto">
-            <v-form fast-fail @submit.prevent="login">
-                <v-text-field
-                    v-model="email"
-                    label="Email"
-                    type="email"
-                ></v-text-field>
+        <v-row>
+            <v-col align="center">
+                <v-sheet width="400">
+                    <v-img src="/Logo.svg" alt="MK THEMED ATTRACTIONS LOGO" />
+                    <v-alert
+                        title="Login Failed"
+                        type="error"
+                        closable
+                        density="compact"
+                        v-if="error"
+                        >{{ error }}</v-alert
+                    >
+                    <v-form @submit.prevent="login">
+                        <v-text-field
+                            v-model="email"
+                            label="Email"
+                            type="email"
+                        ></v-text-field>
 
-                <v-text-field
-                    v-model="password"
-                    label="password"
-                ></v-text-field>
-                <a href="#" class="text-body-2 font-weight-regular"
-                    >Forgot Password?</a
-                >
+                        <v-text-field
+                            v-model="password"
+                            :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
+                            label="password"
+                            :type="showPass ? 'text' : 'password'"
+                            @click:append="showPass = !showPass"
+                        ></v-text-field>
 
-                <v-btn type="submit" color="primary" block class="mt-2"
-                    >Sign in</v-btn
-                >
-            </v-form>
-            <div class="mt-2">
-                <p class="text-body-2">
-                    Don't have an account? <a href="#">Sign Up</a>
-                </p>
-            </div>
-        </v-sheet>
+                        <v-btn
+                            type="submit"
+                            color="blue-lighten-1"
+                            block
+                            class="mt-2"
+                            >Sign in</v-btn
+                        >
+                    </v-form>
+                </v-sheet>
+            </v-col>
+            <v-col align="center">
+                <v-img :width="450" src="/task-2.png" aspect-ratio="1"></v-img>
+            </v-col>
+        </v-row>
     </div>
 </template>

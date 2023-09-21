@@ -19,26 +19,41 @@ export const router = createRouter({
                     path: "category",
                     name: "category",
                     component: () => import("../Pages/Category/Index.vue"),
+                    meta: {
+                        requiresAuth: true,
+                    },
                 },
                 {
                     path: "item",
                     name: "item",
                     component: () => import("../Pages/Item/Index.vue"),
+                    meta: {
+                        requiresAuth: true,
+                    },
                 },
                 {
                     path: "employee",
                     name: "employee",
                     component: () => import("../Pages/Employee/Index.vue"),
+                    meta: {
+                        requiresAuth: true,
+                    },
                 },
                 {
                     path: "location",
                     name: "location",
                     component: () => import("../Pages/Location/Index.vue"),
+                    meta: {
+                        requiresAuth: true,
+                    },
                 },
                 {
                     path: "/:showable+/:id/show",
                     name: "show",
                     component: () => import("../components/Show.vue"),
+                    meta: {
+                        requiresAuth: true,
+                    },
                 },
             ],
         },
@@ -48,4 +63,11 @@ export const router = createRouter({
             component: Login,
         },
     ],
+});
+
+router.beforeEach((to, from, next) => {
+    // if (to.meta.requiresAuth) {
+    // }
+
+    next();
 });

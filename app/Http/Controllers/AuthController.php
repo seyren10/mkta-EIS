@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -11,20 +11,18 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $validated = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required'
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
         ]);
 
-        if (!auth()->attempt($validated))
-            return response()->json([
-                'message' => 'Login credentials invalid.'
-            ], 401);
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
 
-
-        $user = User::where('email', $validated['email'])->first();
-        $token = $request->user()->createToken('api_token');
-
-        return ['token' => $token->plainTextToken, 'token_type' => 'Bearer'];
+            return response()->json(Auth::user());
+        }
+        return response()->json([
+            'error' => 'The provided credentials do not match our records.',
+        ], 401);
     }
 }
