@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('categories', function (Blueprint $table) {
-            $table->string('name');
-            $table->mediumText('description')->nullable();
-            $table->json('json_attr')->nullable();
+        Schema::table('users', function (Blueprint $table) {
+            $table->boolean('password_changed')->default(false);
         });
     }
 
@@ -23,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropColumns('categories', ['name', 'description']);
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn(['password_changed']);
+        });
     }
 };

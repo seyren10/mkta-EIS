@@ -14,26 +14,31 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
-        \App\Models\User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
-        // \App\Models\Employee::factory()->create([
-        //     'employee_no' => '1',
-        //     'full_name' => "MIS Department",
-        //     'RFID_no' => 1_000_000_001,
-        //     'is_active' => 1
-        // ]);
 
-        $this->populateCategory();
 
-        \App\Models\Location::factory()->create([
-            'name' => 'MIS Office'
-        ]);
+
+        // $this->populateCategory();
+
+
         // \App\Models\Category::factory(5)->create();
         // \App\Models\Employee::factory(5)->create();
         // \App\Models\Item::factory(20)->create();
         // \App\Models\EmployeeInventory::factory(20)->create();
+
+        \App\Models\User::factory()->create([
+            'name' => 'MKTA EIS ADMIN',
+            'email' => 'admin@mkthemedattractions.com.ph',
+        ]);
+
+        \App\Models\Location::factory()->create([
+            'name' => 'MIS Office'
+        ]);
+        \App\Models\Employee::factory()->create([
+            'employee_no' => '1',
+            'full_name' => "MIS Department",
+            'RFID_no' => 1_000_000_001,
+            'is_active' => 1
+        ]);
     }
 
     private function populateCategory()

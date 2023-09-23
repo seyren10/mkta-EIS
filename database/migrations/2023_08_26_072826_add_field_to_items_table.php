@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('serial_no')->nullable();
             $table->string('mk_tag_no')->nullable();
             $table->date('date_purchased');
-            $table->integer('accountability_no');
+            $table->string('accountability_no');
             $table->json('json_attr')->nullable();
             $table->enum('status', ['good', 'fair', 'bad', 'for disposal', 'disposed'])->default('good');
         });

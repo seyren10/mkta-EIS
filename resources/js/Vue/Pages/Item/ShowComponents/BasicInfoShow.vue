@@ -1,9 +1,16 @@
 <script>
 import Chip from "../../../components/Chip.vue";
+import Associate from "../Associate.vue";
+
 export default {
-    components: { Chip },
+    components: { Chip, Associate },
     props: {
         item: Object,
+    },
+    data() {
+        return {
+            dialog: false,
+        };
     },
 };
 </script>
@@ -56,7 +63,15 @@ export default {
                 </v-list-item>
                 <v-list-item>
                     <v-list-item-title>
+                        <v-btn
+                            v-if="!item.owned_by_employee"
+                            @click="dialog = true"
+                            icon="mdi-swap-horizontal"
+                            variant="flat"
+                            class="text-blue-lighten-1"
+                        />
                         <router-link
+                            v-else
                             :to="`/employee/${item.owned_by_employee?.id}/show`"
                             class="text-blue-lighten-1"
                             replace
@@ -82,4 +97,11 @@ export default {
             </v-list>
         </v-col>
     </v-row>
+    <v-dialog v-model="dialog">
+        <Associate
+            v-on:close="dialog = false"
+            v-on:change="dialog = false"
+            :item="item"
+        />
+    </v-dialog>
 </template>

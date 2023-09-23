@@ -4,9 +4,9 @@ import { useUserStore } from "../stores/userStore";
 export default {
     setup() {
         const userStore = useUserStore();
-        const { error } = storeToRefs(userStore);
+        const { error, loading } = storeToRefs(userStore);
 
-        return { userStore, error };
+        return { userStore, error, loading };
     },
     data() {
         return {
@@ -30,11 +30,9 @@ export default {
                 <v-sheet width="400">
                     <v-img src="/Logo.svg" alt="MK THEMED ATTRACTIONS LOGO" />
                     <v-alert
-                        title="Login Failed"
-                        type="error"
-                        closable
                         density="compact"
                         v-if="error"
+                        class="mb-4 text-caption bg-red-lighten-3 text-red-darken-4"
                         >{{ error }}</v-alert
                     >
                     <v-form @submit.prevent="login">
@@ -57,6 +55,7 @@ export default {
                             color="blue-lighten-1"
                             block
                             class="mt-2"
+                            :loading="loading"
                             >Sign in</v-btn
                         >
                     </v-form>

@@ -8,7 +8,7 @@ export default {
         const locationStore = useLocationStore();
         await locationStore.getLocations();
         const itemStore = useItemStore();
-        await itemStore.getItems();
+        // await itemStore.getItems();
 
         const { locations, errors, isLoading } = storeToRefs(locationStore);
         const { items } = storeToRefs(itemStore);
@@ -35,7 +35,7 @@ export default {
                 if (
                     curr.employee_inventories &&
                     // curr.employee_inventories[0].is_active &&
-                    curr.employee_inventories[0].by_location.name === loc.name
+                    curr.employee_inventories[0]?.by_location.name === loc.name
                 ) {
                     return (acc += 1);
                 } else return acc;

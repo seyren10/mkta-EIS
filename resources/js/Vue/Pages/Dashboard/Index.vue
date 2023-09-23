@@ -6,7 +6,7 @@ import { useEmployeeStore } from "../../stores/employeeStore";
 export default {
     async setup() {
         const itemStore = useItemStore();
-        await itemStore.getItems();
+        // await itemStore.getItems();
         const employeeStore = useEmployeeStore();
         await employeeStore.getEmployees();
         const { employees } = storeToRefs(employeeStore);

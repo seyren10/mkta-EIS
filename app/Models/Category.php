@@ -12,7 +12,7 @@ class Category extends Model
 
 
     protected $fillable = [
-        'name', 'description'
+        'name', 'description', 'json_attr'
     ];
 
     protected $hidden = ['updated_at'];

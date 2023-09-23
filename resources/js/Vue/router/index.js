@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import MainLayout from "../Layouts/MainLayout.vue";
 import Login from "../Auth/Login.vue";
-
+import { useUserStore } from "../stores/userStore";
 export const router = createRouter({
     history: createWebHistory(),
     routes: [
@@ -14,6 +14,9 @@ export const router = createRouter({
                     path: "",
                     name: "dashboard",
                     component: () => import("../Pages/Dashboard/Index.vue"),
+                    meta: {
+                        requiresAuth: true,
+                    },
                 },
                 {
                     path: "category",
@@ -48,6 +51,14 @@ export const router = createRouter({
                     },
                 },
                 {
+                    path: "profile",
+                    name: "profile",
+                    component: () => import("../Pages/UserProfile/Index.vue"),
+                    meta: {
+                        requiresAuth: true,
+                    },
+                },
+                {
                     path: "/:showable+/:id/show",
                     name: "show",
                     component: () => import("../components/Show.vue"),
@@ -65,9 +76,10 @@ export const router = createRouter({
     ],
 });
 
-router.beforeEach((to, from, next) => {
-    // if (to.meta.requiresAuth) {
-    // }
+router.beforeEach(async (to) => {
+    const userStore = useUserStore();
+    await userStore.getUser();
 
-    next();
+    if (to.meta.requiresAuth && !userStore.user)
+        return { name: "login", replace: true };
 });

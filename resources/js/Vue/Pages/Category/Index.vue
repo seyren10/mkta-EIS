@@ -12,7 +12,7 @@ export default {
         await categoryStore.getCategories();
 
         const itemStore = useItemStore();
-        await itemStore.getItems();
+        // await itemStore.getItems();
 
         const { getItemCountByCategory } = storeToRefs(itemStore);
         return {
@@ -23,6 +23,14 @@ export default {
         };
     },
     methods: {},
+    data() {
+        return {
+            Editing: {
+                dialog: false,
+                data: null,
+            },
+        };
+    },
     components: { Create, Edit },
 };
 </script>
@@ -48,11 +56,23 @@ export default {
                     <v-chip>{{ category.items_count }}</v-chip>
                 </td>
                 <td>
-                    <Edit :category="category"></Edit>
+                    <v-btn
+                        fab
+                        @click="
+                            () => {
+                                Editing.data = category;
+                                Editing.dialog = true;
+                            }
+                        "
+                        icon="mdi-pencil"
+                    />
                 </td>
             </tr>
         </tbody>
     </v-table>
+    <v-dialog v-model="Editing.dialog" full-screen>
+        <Edit :category="Editing.data" v-on:close="Editing.dialog = false" />
+    </v-dialog>
 </template>
 
 <style scoped></style>

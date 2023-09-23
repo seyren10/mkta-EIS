@@ -1,5 +1,5 @@
 import "./bootstrap.js";
-import { createApp } from "vue";
+import { createApp, markRaw } from "vue";
 import App from "./Vue/App.vue";
 
 //State manager
@@ -22,6 +22,12 @@ import "./utilities/helper.js";
 
 const pinia = createPinia();
 
+pinia.use(({ state }) => {
+    return {
+        router: markRaw(router),
+    };
+});
+
 const vuetify = createVuetify({
     components,
     directives,
@@ -32,6 +38,6 @@ const vuetify = createVuetify({
 
 const app = createApp(App);
 app.use(pinia);
-app.use(router);
 app.use(vuetify);
+app.use(router);
 app.mount("#app");

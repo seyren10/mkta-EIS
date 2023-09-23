@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login']);
+Route::delete('/logout', [\App\Http\Controllers\AuthController::class, 'logout']);
+Route::put('/set-password-first-time', [\App\Http\Controllers\AuthController::class, 'setPasswordFirstTime']);
+Route::put('/update-name', [\App\Http\Controllers\AuthController::class, 'updateName']);
+
 Route::get('/', function () {
     return view('app');
 })->name('application');
@@ -20,4 +25,3 @@ Route::get('/', function () {
 Route::fallback(function () {
     return view('app');
 });
-

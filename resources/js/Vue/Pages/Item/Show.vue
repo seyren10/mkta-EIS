@@ -56,24 +56,6 @@ export default {
             ],
         };
     },
-
-    methods: {
-        async fetchItem() {
-            const res = await axios.get(`/api/item/${this.$route.params.id}`);
-            this.item = res.data.data;
-        },
-
-        async fetchEmployeeInventory() {
-            const res = await axios.get(
-                `/api/employee-inventory/${this.$route.params.id}`
-            );
-            this.employeeInventory = res.data.data;
-        },
-    },
-    created() {
-        this.fetchItem();
-        this.fetchEmployeeInventory();
-    },
 };
 </script>
 

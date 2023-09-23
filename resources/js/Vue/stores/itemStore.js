@@ -29,13 +29,14 @@ export const useItemStore = defineStore("items", {
             try {
                 this.isLoading = true;
                 this.errors = [];
-                await axios.post("/api/item", item);
+                const res = await axios.post("/api/item", item);
+                return res;
             } catch (e) {
                 console.log(e.message);
                 this.errors = e.response.data.errors;
             } finally {
                 this.isLoading = false;
-                this.getItems();
+                await this.getItems();
             }
         },
         async updateItem(id, item) {
@@ -48,7 +49,7 @@ export const useItemStore = defineStore("items", {
                 this.errors = e.response.data.errors;
             } finally {
                 this.isLoading = false;
-                this.getItems();
+                // this.getItems();
             }
         },
     },

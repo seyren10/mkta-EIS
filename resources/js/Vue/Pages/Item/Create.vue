@@ -1,12 +1,18 @@
 <script>
 import { useItemStore } from "../../stores/itemStore";
 import { storeToRefs } from "pinia";
+import { useUserStore } from "../../stores/userStore";
+import { useEmployeeInventoryStore } from "../../stores/employeeInventoryStore";
 export default {
     setup() {
         const itemStore = useItemStore();
-        const { errors, isLoading } = storeToRefs(itemStore);
+        const userStore = useUserStore();
+        const employeeInventoryStore = useEmployeeInventoryStore();
 
-        return { errors, isLoading, itemStore };
+        const { errors, isLoading } = storeToRefs(itemStore);
+        const { user } = storeToRefs(userStore);
+
+        return { errors, isLoading, itemStore, employeeInventoryStore, user };
     },
     props: {
         categories: Array,
@@ -22,34 +28,51 @@ export default {
                 date_purchased: new Date().toISOString().split("T")[0],
                 accountability_no: null,
                 category_id: this.categories.length
-                    ? 1
+                    ? this.categories[0].id
                     : "No Category Available",
                 status: "good",
             },
-            additionalData: {
-                processor: null,
-                motherboard: null,
-                memory: null,
-                storage: null,
-                peripherals: null,
-            },
+            additionalData: {},
         };
     },
+    watch: {
+        "form.category_id": {
+            handler(newCategoryId) {
+                console.log(newCategoryId);
+                const category = this.categories.find(
+                    (c) => c.id === newCategoryId
+                );
 
+                if (category && category.json_attr)
+                    this.additionalData = JSON.parse(category.json_attr);
+            },
+            immediate: true,
+        },
+    },
     methods: {
         async create() {
-            //pass additional data when a category is a PC SET
-            if (this.form.category_id === 1) {
-                this.form = {
-                    ...this.form,
-                    json_attr: JSON.stringify({ ...this.additionalData }),
-                };
-            }
+            const res = await this.itemStore.postItem({
+                ...this.form,
+                json_attr: JSON.stringify(this.additionalData),
+            });
 
-            await this.itemStore.postItem(this.form);
+            const itemData = res.data.data;
+
+            // Immediately Add initial Transfer to MIS Office
+            const misOfficeForm = {
+                transferred_date: new Date().toISOString().split("T")[0],
+                officer_in_charge: this.user ? this.user.name : "anonymous",
+                is_active: 1,
+                item_id: itemData.id,
+                employee_id: 1, // MIS OFFICE
+                location_id: 1, //MIS OFFICE
+            };
+
+            await this.employeeInventoryStore.postEmployeeInventories(
+                misOfficeForm
+            );
 
             if (!Object.keys(this.errors).length) {
-                this.dialog = false;
                 this.form = {
                     brand: null,
                     model: null,
@@ -62,13 +85,8 @@ export default {
                         : "No Category Available",
                     condition: "good",
                 };
-                this.additionalData = {
-                    processor: null,
-                    motherboard: null,
-                    memory: null,
-                    storage: null,
-                    peripherals: null,
-                };
+                this.additionalData = {};
+                this.dialog = false;
             }
         },
     },
@@ -185,32 +203,13 @@ export default {
                             </v-col>
                         </v-row>
                         <v-row>
-                            <v-col cols="12" v-if="form.category_id === 1">
+                            <v-col cols="12">
                                 <h3 class="text-overline">Additional Data</h3>
                                 <v-text-field
-                                    label="Processor"
-                                    placeholder="processor brand,speed,serial number"
-                                    v-model="additionalData.processor"
-                                ></v-text-field>
-                                <v-text-field
-                                    label="Motherboard"
-                                    placeholder="motherboard brand,type,serial number etc..."
-                                    v-model="additionalData.motherboard"
-                                ></v-text-field>
-                                <v-text-field
-                                    label="RAM (Memory)"
-                                    placeholder="RAM brand,memory size,speed, serial number"
-                                    v-model="additionalData.memory"
-                                ></v-text-field>
-                                <v-text-field
-                                    label="HDD/SSD (Storage)"
-                                    placeholder="HDD/SSD brand, storage size, serial number, etc..."
-                                    v-model="additionalData.storage"
-                                ></v-text-field>
-                                <v-text-field
-                                    label="Peripherals"
-                                    placeholder="include mouse,keyboard,speakers, etc... "
-                                    v-model="additionalData.peripherals"
+                                    v-for="(data, index) in additionalData"
+                                    :key="index"
+                                    :label="data.title"
+                                    v-model="data.value"
                                 ></v-text-field>
                             </v-col>
                         </v-row>

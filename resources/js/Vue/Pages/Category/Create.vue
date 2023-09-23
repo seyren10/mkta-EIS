@@ -1,7 +1,12 @@
 <script>
 import { useCategoryStore } from "../../stores/categoryStore";
 import { storeToRefs } from "pinia";
+
+import CustomAttribute from "./components/CustomAttribute.vue";
 export default {
+    components: {
+        CustomAttribute,
+    },
     setup() {
         const categoryStore = useCategoryStore();
         const { errors, isLoading } = storeToRefs(categoryStore);
@@ -14,19 +19,27 @@ export default {
                 name: null,
                 description: null,
             },
+            customAttributes: null,
         };
     },
     methods: {
         async create() {
-            this.categoryStore.addCategory(this.form);
+            this.categoryStore.addCategory({
+                ...this.form,
+                json_attr: this.customAttributes,
+            });
 
             if (!Object.keys(this.errors).length) {
+                this.dialog = false;
                 this.form = {
                     name: null,
                     description: null,
                 };
-                this.dialog = false;
+                this.customAttributes = null;
             }
+        },
+        handleCustomAttribute(attributes) {
+            this.customAttributes = JSON.stringify(attributes);
         },
     },
 };
@@ -81,6 +94,15 @@ export default {
                                     label="Description"
                                     v-model="form.description"
                                 ></v-text-field>
+                            </v-col>
+
+                            <v-col cols="12">
+                                <h1 class="text-subtitle-1">
+                                    Custom Attributes
+                                </h1>
+                                <CustomAttribute
+                                    v-on:change="handleCustomAttribute"
+                                />
                             </v-col>
 
                             <v-col cols="12"

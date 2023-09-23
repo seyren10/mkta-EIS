@@ -36,7 +36,6 @@ class EmployeeInventoryController extends Controller
           'transferred_date' => ['date'],
           'officer_in_charge' => ['required', 'string'],
           'item_id' => ['required', 'integer'],
-          'employee_id' => ['required', 'integer'],
           'location_id' => ['required', 'integer']
         ]
       ),

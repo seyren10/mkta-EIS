@@ -33,18 +33,20 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
-        $category = Category::find($request->category_id);
-        $category->items()->create(
+        $item = Item::create(
             [
                 ...$request->all(),
                 ...$request->validate([
                     'model' => ['required'],
                     'brand' => 'required',
+                    'accountability_no' => 'required'
                 ])
             ]
         );
 
-        return response()->noContent();
+        return response()->json([
+            'data' => $item
+        ]);
     }
 
     /**

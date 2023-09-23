@@ -17,15 +17,19 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $query = QueryBuilder::for(Category::class)
-            ->allowedSorts('name')
-            ->defaultSort('-created_at')
-            ->withCount(['items'])
-            ->get();
+        // $query = QueryBuilder::for(Category::class)
+        //     ->allowedSorts('name')
+        //     ->defaultSort('-created_at')
+        //     ->withCount(['items'])
+        //     ->get();
 
         // $categories = Category::orderByDesc('created_at')->get(['id', 'name', 'description']);
         // return response()->json($categories);
-        return new CategoryCollection($query);
+        // return new CategoryCollection($query);
+
+        return response()->json([
+            'data' => Category::withCount(['items'])->get()
+        ]);
     }
 
     /**

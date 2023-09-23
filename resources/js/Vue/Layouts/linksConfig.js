@@ -29,4 +29,10 @@ export const links = [
         value: "locations",
         icon: "mdi-map-marker-outline",
     },
+    {
+        to: "/profile",
+        title: "My Profile",
+        value: "profile",
+        icon: "mdi-account-outline",
+    },
 ];
