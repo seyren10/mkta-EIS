@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+
 
 Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login']);
 Route::delete('/logout', [\App\Http\Controllers\AuthController::class, 'logout']);

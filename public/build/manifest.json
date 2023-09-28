@@ -1,4 +1,45 @@
 {
+  "VDataTable.css": {
+    "file": "assets/VDataTable-4b004ac9.css",
+    "src": "VDataTable.css"
+  },
+  "_Associate-d56e3e23.js": {
+    "file": "assets/Associate-d56e3e23.js",
+    "imports": [
+      "resources/js/app.js",
+      "_employeeStore-4009d962.js",
+      "_itemStore-737c839f.js",
+      "_locationStore-c999e36b.js",
+      "_VDataTable-7163fc42.js"
+    ]
+  },
+  "_VDataTable-7163fc42.js": {
+    "css": [
+      "assets/VDataTable-4b004ac9.css"
+    ],
+    "file": "assets/VDataTable-7163fc42.js",
+    "imports": [
+      "resources/js/app.js"
+    ]
+  },
+  "_employeeStore-4009d962.js": {
+    "file": "assets/employeeStore-4009d962.js",
+    "imports": [
+      "resources/js/app.js"
+    ]
+  },
+  "_itemStore-737c839f.js": {
+    "file": "assets/itemStore-737c839f.js",
+    "imports": [
+      "resources/js/app.js"
+    ]
+  },
+  "_locationStore-c999e36b.js": {
+    "file": "assets/locationStore-c999e36b.js",
+    "imports": [
+      "resources/js/app.js"
+    ]
+  },
   "node_modules/@mdi/font/fonts/materialdesignicons-webfont.eot": {
     "file": "assets/materialdesignicons-webfont-67d24abe.eot",
     "src": "node_modules/@mdi/font/fonts/materialdesignicons-webfont.eot"
@@ -16,59 +57,120 @@
     "src": "node_modules/@mdi/font/fonts/materialdesignicons-webfont.woff2"
   },
   "resources/css/app.css": {
-    "file": "assets/app-4ed993c7.js",
+    "file": "assets/app-afd23f08.css",
     "isEntry": true,
     "src": "resources/css/app.css"
   },
-  "resources/js/Vue/Pages/Category/Index.css": {
-    "file": "assets/Index-25e6103d.css",
-    "src": "resources/js/Vue/Pages/Category/Index.css"
-  },
   "resources/js/Vue/Pages/Category/Index.vue": {
-    "css": [
-      "assets/Index-25e6103d.css"
-    ],
-    "file": "assets/Index-2e8d3c89.js",
+    "file": "assets/Index-56e00323.js",
     "imports": [
-      "resources/js/app.js"
+      "resources/js/app.js",
+      "_itemStore-737c839f.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/Vue/Pages/Category/Index.vue"
   },
+  "resources/js/Vue/Pages/Dashboard/Index.css": {
+    "file": "assets/Index-eb3acb4e.css",
+    "src": "resources/js/Vue/Pages/Dashboard/Index.css"
+  },
   "resources/js/Vue/Pages/Dashboard/Index.vue": {
-    "file": "assets/Index-22b47010.js",
+    "css": [
+      "assets/Index-eb3acb4e.css"
+    ],
+    "file": "assets/Index-1577ac78.js",
     "imports": [
-      "resources/js/app.js"
+      "resources/js/app.js",
+      "_itemStore-737c839f.js",
+      "_employeeStore-4009d962.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/Vue/Pages/Dashboard/Index.vue"
   },
+  "resources/js/Vue/Pages/Employee/Index.css": {
+    "file": "assets/Index-38dd830a.css",
+    "src": "resources/js/Vue/Pages/Employee/Index.css"
+  },
   "resources/js/Vue/Pages/Employee/Index.vue": {
-    "file": "assets/Index-f5f6aae4.js",
+    "css": [
+      "assets/Index-38dd830a.css"
+    ],
+    "file": "assets/Index-b2b0d9d4.js",
     "imports": [
-      "resources/js/app.js"
+      "_employeeStore-4009d962.js",
+      "resources/js/app.js",
+      "_VDataTable-7163fc42.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/Vue/Pages/Employee/Index.vue"
   },
-  "resources/js/Vue/Pages/EmployeeInventory/Index.vue": {
-    "file": "assets/Index-8b9403e1.js",
-    "imports": [
-      "resources/js/app.js"
-    ],
-    "isDynamicEntry": true,
-    "src": "resources/js/Vue/Pages/EmployeeInventory/Index.vue"
+  "resources/js/Vue/Pages/Item/Index.css": {
+    "file": "assets/Index-637a2aa6.css",
+    "src": "resources/js/Vue/Pages/Item/Index.css"
   },
   "resources/js/Vue/Pages/Item/Index.vue": {
-    "file": "assets/Index-7bf4a6c4.js",
+    "css": [
+      "assets/Index-637a2aa6.css"
+    ],
+    "file": "assets/Index-1c2990ef.js",
     "imports": [
-      "resources/js/app.js"
+      "_itemStore-737c839f.js",
+      "_Associate-d56e3e23.js",
+      "resources/js/app.js",
+      "_VDataTable-7163fc42.js",
+      "_employeeStore-4009d962.js",
+      "_locationStore-c999e36b.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/Vue/Pages/Item/Index.vue"
   },
+  "resources/js/Vue/Pages/Location/Index.vue": {
+    "file": "assets/Index-beeb85f0.js",
+    "imports": [
+      "_locationStore-c999e36b.js",
+      "resources/js/app.js",
+      "_itemStore-737c839f.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/Vue/Pages/Location/Index.vue"
+  },
+  "resources/js/Vue/Pages/UserProfile/Index.css": {
+    "file": "assets/Index-7c3d49c3.css",
+    "src": "resources/js/Vue/Pages/UserProfile/Index.css"
+  },
+  "resources/js/Vue/Pages/UserProfile/Index.vue": {
+    "css": [
+      "assets/Index-7c3d49c3.css"
+    ],
+    "file": "assets/Index-efb18f19.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/Vue/Pages/UserProfile/Index.vue"
+  },
+  "resources/js/Vue/components/Show.css": {
+    "file": "assets/Show-0ab1ee95.css",
+    "src": "resources/js/Vue/components/Show.css"
+  },
+  "resources/js/Vue/components/Show.vue": {
+    "css": [
+      "assets/Show-0ab1ee95.css"
+    ],
+    "file": "assets/Show-70428a27.js",
+    "imports": [
+      "resources/js/app.js",
+      "_Associate-d56e3e23.js",
+      "_employeeStore-4009d962.js",
+      "_itemStore-737c839f.js",
+      "_locationStore-c999e36b.js",
+      "_VDataTable-7163fc42.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/Vue/components/Show.vue"
+  },
   "resources/js/app.css": {
-    "file": "assets/app-48ed52cc.css",
+    "file": "assets/app-948f0ca7.css",
     "src": "resources/js/app.css"
   },
   "resources/js/app.js": {
@@ -79,16 +181,18 @@
       "assets/materialdesignicons-webfont-a58ecb54.ttf"
     ],
     "css": [
-      "assets/app-48ed52cc.css"
+      "assets/app-948f0ca7.css"
     ],
     "dynamicImports": [
       "resources/js/Vue/Pages/Dashboard/Index.vue",
       "resources/js/Vue/Pages/Category/Index.vue",
       "resources/js/Vue/Pages/Item/Index.vue",
       "resources/js/Vue/Pages/Employee/Index.vue",
-      "resources/js/Vue/Pages/EmployeeInventory/Index.vue"
+      "resources/js/Vue/Pages/Location/Index.vue",
+      "resources/js/Vue/Pages/UserProfile/Index.vue",
+      "resources/js/Vue/components/Show.vue"
     ],
-    "file": "assets/app-c99d7a89.js",
+    "file": "assets/app-f2b2cabb.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   }
